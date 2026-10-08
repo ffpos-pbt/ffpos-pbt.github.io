@@ -3181,7 +3181,7 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF810TH008';
+const FF_APP_VERSION = 'FF810TH009';
 (function checkAppVersion(){
   const saved = localStorage.getItem('ff_app_version');
   if(saved !== FF_APP_VERSION){
@@ -3385,6 +3385,8 @@ function gateMainAction(){
   unlockApp();
   showSubStatusBar();
   updateSettingsSubInfo();
+  const ft = getFreeTrial();
+  showToast('🎁 آپ کا 7 دن کا مفت ٹرائل شروع ہو گیا — ' + _dmy(_isoDay(ft.end)) + ' تک');
 }
 async function openGatePlans(){
   const plans = document.getElementById('ffGatePlans');
@@ -9237,7 +9239,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF810TH008';
+const APP_VERSION = 'FF810TH009';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
