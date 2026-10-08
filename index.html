@@ -3002,7 +3002,7 @@ async function purchaseBasePlan(basePlanId){
     const payData = { sku };
     const oldSku = localStorage.getItem('ff_play_plan') || '';
     const oldToken = localStorage.getItem('ff_play_token') || '';
-    if(getSubStatus().active && oldToken && oldSku){
+    if(_paidActive() && oldToken && oldSku){
       if(oldSku === sku){
         if(msg){ msg.textContent = '✅ یہ پیکج پہلے سے فعال ہے — گوگل خود تجدید کرتا رہے گا'; msg.className='ff-ov-msg ok'; }
         return;
@@ -3021,11 +3021,10 @@ async function purchaseBasePlan(basePlanId){
     // Play کو خریداری درج کرنے میں چند سیکنڈ لگ سکتے ہیں — تین بار دوبارہ چیک کریں
     for(let i=0;i<4;i++){
       await refreshSubscriptionStatus();
-      if(getSubStatus().active) break;
+      if(_paidActive()) break;
       await new Promise(r=>setTimeout(r,1500));
     }
-    const sub = getSubStatus();
-    if(sub.active){
+    if(_paidActive()){
       if(msg){ msg.textContent = '✅ سبسکرپشن فعال ہو گئی!'; msg.className='ff-ov-msg ok'; }
       setTimeout(()=>{
         window._ffInfoFetched = false;
@@ -3113,13 +3112,50 @@ function closeContactModal(){
 //  صفحہ خود بخود ٹرائل کی شرائط دکھا دیتا ہے، ایپ کے کوڈ کو الگ
 //  سے ٹرائل مینج کرنے کی ضرورت نہیں رہی)
 // ============================================================
+// Google Play کی ادا شدہ سبسکرپشن فعال ہے؟
+function _paidActive(){ return localStorage.getItem('ff_play_active') === '1'; }
+
+// ============================================================
+// اپنا مفت ٹرائل — 7 دن، بغیر کارڈ اور بغیر Google Play کے
+// ایک بار شروع ہو جائے تو دوبارہ نہیں ملتا۔ فون کی تاریخ پیچھے کرنے سے دن واپس نہیں آتے۔
+// ============================================================
+const FF_FREE_TRIAL_DAYS = 7;
+function _ftStart(){
+  let v = parseInt(localStorage.getItem('ff_free_trial_start') || '', 10);
+  if(!v){ const m = document.cookie.match(/(?:^|; )ff_ft=(\d+)/); if(m) v = parseInt(m[1], 10); }
+  return v || 0;
+}
+function _ftNow(){
+  // فون کی تاریخ پیچھے کی جائے تو بھی آخری دیکھا گیا وقت ہی مانا جائے
+  const last = parseInt(localStorage.getItem('ff_free_trial_seen') || '0', 10) || 0;
+  const now = Math.max(Date.now(), last);
+  try{ localStorage.setItem('ff_free_trial_seen', String(now)); }catch(e){}
+  return now;
+}
+function getFreeTrial(){
+  const start = _ftStart();
+  if(!start) return { used:false, active:false };
+  const end = start + FF_FREE_TRIAL_DAYS * 86400000;
+  const now = _ftNow();
+  const active = now < end;
+  return { used:true, active, start, end, daysLeft: active ? Math.ceil((end - now) / 86400000) : 0 };
+}
+function startFreeTrial(){
+  if(_ftStart()) return;                         // ایک بار سے زیادہ نہیں
+  const now = Date.now();
+  localStorage.setItem('ff_free_trial_start', String(now));
+  localStorage.setItem('ff_free_trial_seen', String(now));
+  try{ document.cookie = 'ff_ft=' + now + '; max-age=315360000; path=/; SameSite=Lax'; }catch(e){}
+}
+function _isoDay(ms){ const d = new Date(ms); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+
 function getSubStatus(){
+  if(_paidActive()) return { active:true, paid:true, trial:false, expired:false, neverActivated:false };
+  const ft = getFreeTrial();
+  if(ft.active) return { active:true, paid:false, trial:true, expired:false, neverActivated:false };
   const everChecked = localStorage.getItem('ff_play_ever_checked') === '1';
-  if(!everChecked){
-    return { active:false, expired:false, neverActivated:true };
-  }
-  const active = localStorage.getItem('ff_play_active') === '1';
-  return { active, expired:!active, neverActivated:false };
+  if(!everChecked && !ft.used) return { active:false, expired:false, neverActivated:true };
+  return { active:false, paid:false, trial:false, expired:true, neverActivated:false };
 }
 
 // ============================================================
@@ -3145,7 +3181,7 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF810TH007';
+const FF_APP_VERSION = 'FF810TH008';
 (function checkAppVersion(){
   const saved = localStorage.getItem('ff_app_version');
   if(saved !== FF_APP_VERSION){
@@ -3232,7 +3268,6 @@ async function bootApp(){
   await initPlayBilling();
   await refreshSubscriptionStatus();
   flushPendingPlayAcks(); // پچھلی بار رہ جانے والی تصدیقیں — پس منظر میں
-  await checkTrialEligibility();
 
   showGate(false);
 }
@@ -3276,38 +3311,23 @@ function _dmy(iso){ // 2026-10-08 → 08-10-2026
 }
 function _everSubscribed(){ return localStorage.getItem('ff_ever_sub') === '1'; }
 
-// ---- کیا اس Google اکاؤنٹ کو مفت ٹرائل مل سکتا ہے؟ ----
-// Play صرف وہی آفرز بھیجتا ہے جن کا یہ اکاؤنٹ اہل ہو۔ اگر ماہانہ پلان میں freeTrialPeriod نہیں آیا
-// تو یہ اکاؤنٹ پہلے ٹرائل/سبسکرپشن لے چکا ہے — تب "مفت ٹرائل" کا بٹن نہیں دکھانا، سیدھے پیکج دکھانے ہیں۔
-// _ffTrialEligible: true = اہل، false = اہل نہیں، null = معلوم نہیں ہو سکا (Play دستیاب نہیں)
-window._ffTrialEligible = null;
-async function checkTrialEligibility(){
-  if(!_digitalGoodsService || getSubStatus().active || _everSubscribed()) return;
-  try{
-    const d = await Promise.race([
-      _digitalGoodsService.getDetails(['ffpos_monthly']),
-      new Promise(r => setTimeout(() => r(null), 5000))
-    ]);
-    if(!d || !d.length) return;
-    window._ffTrialEligible = !!(d[0].freeTrialPeriod);
-  }catch(e){}
-}
-
 function _updateGateStatus(){
   const st = document.getElementById('ffGateStatus');
   if(!st || window._gateChecking) return;
-  const sub = getSubStatus(), info = getSubInfo(), d = _daysLeft(info);
-  if(sub.active){
+  const sub = getSubStatus(), info = getSubInfo(), d = _daysLeft(info), ft = getFreeTrial();
+  if(sub.trial){
+    st.innerHTML = '🎁 مفت ٹرائل چل رہا ہے — باقی دن: <b>' + ft.daysLeft + '</b><br>ختم: <b>' + _dmy(_isoDay(ft.end)) + '</b> — چاہیں تو ابھی سے پیکج لے لیں';
+  } else if(sub.active){
     const plan = info && FF_PLAN_NAMES[info.productId] ? FF_PLAN_NAMES[info.productId] : '';
     st.innerHTML = (info && info.trial ? '🎁 مفت ٹرائل چل رہا ہے' : '✅ سبسکرپشن فعال') + (plan ? ' — <b>' + plan + '</b>' : '') +
       (d !== null ? '<br>باقی دن: <b>' + d + '</b> — ' + (info.autoRenew ? 'تجدید' : 'ختم') + ': <b>' + _dmy(info.expiry) + '</b>' : '') +
       '<br>بڑا پیکج لینے پر بچے ہوئے دن نئے پیکج میں جڑ جائیں گے';
   } else if(_everSubscribed()){
     st.innerHTML = '⏳ آپ کی سبسکرپشن / ٹرائل <b>ختم</b> ہو گئی<br>کام جاری رکھنے کے لیے نیچے سے پیکج چنیں';
-  } else if(window._ffTrialEligible === false){
-    st.innerHTML = 'ℹ️ اس Google اکاؤنٹ پر مفت ٹرائل پہلے استعمال ہو چکا ہے<br>کام شروع کرنے کے لیے نیچے سے پیکج چنیں';
+  } else if(ft.used){
+    st.innerHTML = '⏳ آپ کا <b>7 دن کا مفت ٹرائل ختم</b> ہو گیا<br>کام جاری رکھنے کے لیے نیچے سے پیکج چنیں';
   } else {
-    st.innerHTML = '🎁 پہلی بار؟ <b>7 دن بالکل مفت</b><br>ٹرائل کے دوران کسی بھی وقت منسوخ کر سکتے ہیں';
+    st.innerHTML = '🎁 پہلی بار؟ <b>7 دن بالکل مفت</b><br>نہ کارڈ، نہ ادائیگی — بٹن دبائیں اور ایپ شروع';
   }
 }
 
@@ -3339,19 +3359,33 @@ function showGate(inApp){
     if(!inApp){ unlockApp(); return; }          // فعال — خود اندر
     btn.style.display = 'none'; link.style.display = 'none';
     openGatePlans();                            // ایپ کے اندر سے: پیکج بدلنا/بڑا کرنا
-  } else if(_everSubscribed() || window._ffTrialEligible === false){
+  } else if(_everSubscribed() || getFreeTrial().used){
     btn.style.display = 'none'; link.style.display = 'none';
-    openGatePlans();                            // ٹرائل/سبسکرپشن ختم، یا ٹرائل کا اہل نہیں — پیکج سامنے
+    openGatePlans();                            // ٹرائل/سبسکرپشن ختم — پیکج سامنے
   } else {
     btn.className = 'ffg-btn'; btn.textContent = '🎁 7 دن مفت ٹرائل شروع کریں'; btn.style.display = '';
     link.style.display = '';                    // چاہے تو ابھی سے پیکج بھی دیکھ لے
   }
 }
+// ایپ کھلی رہے اور ٹرائل/سبسکرپشن کی مدت گزر جائے تو واپس آنے پر گیٹ دکھائیں
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState !== 'visible' || FF_TESTING_MODE || window._gateChecking) return;
+  const g = document.getElementById('ffGate');
+  if(g && g.classList.contains('show')) return;
+  if(!getSubStatus().active) showGate(false); else showSubStatusBar();
+});
 function closeGate(){
   const g = document.getElementById('ffGate'); if(g) g.classList.remove('show','inapp');
 }
-// ٹرائل = ماہانہ پیکج کی خریداری، جس پر گوگل پہلی بار 7 دن مفت دیتا ہے
-function gateMainAction(){ purchaseBasePlan('ffpos_monthly'); }
+// مفت ٹرائل — ایپ کا اپنا، بغیر کارڈ: بٹن دباتے ہی ایپ کھل جائے
+function gateMainAction(){
+  if(_everSubscribed() || _ftStart()){ openGatePlans(); return; }
+  startFreeTrial();
+  closeGate();
+  unlockApp();
+  showSubStatusBar();
+  updateSettingsSubInfo();
+}
 async function openGatePlans(){
   const plans = document.getElementById('ffGatePlans');
   plans.innerHTML = '<div class="ffg-note">⏳ پیکج لوڈ ہو رہے ہیں...</div>';
@@ -3374,6 +3408,17 @@ function showSubStatusBar(){
   const sub = getSubStatus();
   if(!sub.active){ bar.className = 'sub-status-bar'; return; }
   bar.onclick = function(){ showGate(true); };   // پٹی دبانے پر پیکج/اپگریڈ
+  if(sub.trial){
+    const ft = getFreeTrial();
+    if(ft.daysLeft <= 3){
+      bar.innerHTML = `<span>⚠️ مفت ٹرائل کے صرف ${ft.daysLeft} دن باقی ہیں (${_dmy(_isoDay(ft.end))} تک) — کام نہ رکے، پیکج لے لیں — یہاں دبائیں ⚠️</span>`;
+      bar.className = 'sub-status-bar show ffs warn-run';
+    } else {
+      bar.innerHTML = `<span>🎁 مفت ٹرائل • شروع ${_dmy(_isoDay(ft.start))} • ختم ${_dmy(_isoDay(ft.end))} • ${ft.daysLeft} دن باقی</span>`;
+      bar.className = 'sub-status-bar show ffs';
+    }
+    return;
+  }
   const info = getSubInfo(), d = _daysLeft(info);
   const plan = info && FF_PLAN_NAMES[info.productId] ? FF_PLAN_NAMES[info.productId] : 'Google Play';
   if(info && !info.autoRenew && d !== null && d <= 7){
@@ -3398,7 +3443,11 @@ function updateSettingsSubInfo(){
   const sub = getSubStatus();
   const el  = document.getElementById('settingsSubStatus');
   if(!el) return;
-  if(sub.active){
+  if(sub.trial){
+    el.style.color = '#2e7d32';
+    const ft = getFreeTrial();
+    el.textContent = '🎁 مفت ٹرائل — ' + ft.daysLeft + ' دن باقی (ختم ' + _dmy(_isoDay(ft.end)) + ')';
+  } else if(sub.active){
     el.style.color = '#2e7d32';
     const info = getSubInfo(), d = _daysLeft(info);
     el.textContent = '✅ فعال (Google Play)' + (info ? ' — ' + (info.autoRenew ? 'تجدید ' : 'ختم ') + _dmy(info.expiry) + (d !== null ? ' (' + d + ' دن)' : '') : '');
@@ -3484,7 +3533,9 @@ function refreshOwnerPanel(){
 
   const sub = getSubStatus();
   const info = document.getElementById('ownerSubInfo');
-  if(sub.active){
+  if(sub.trial){
+    info.innerHTML = '<b style="color:#66bb6a;">🎁 مفت ٹرائل — ' + getFreeTrial().daysLeft + ' دن باقی</b>';
+  } else if(sub.active){
     info.innerHTML = '<b style="color:#66bb6a;">✅ فعال (Google Play)</b>';
   } else if(sub.expired){
     info.innerHTML = '<b style="color:#ff5252;">❌ ختم</b> — دوبارہ سبسکرائب کریں';
@@ -9186,7 +9237,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF810TH007';
+const APP_VERSION = 'FF810TH008';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
