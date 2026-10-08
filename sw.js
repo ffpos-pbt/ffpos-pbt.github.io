@@ -1,5 +1,5 @@
 // FF POS — Service Worker (بنیادی آف لائن سپورٹ)
-const CACHE_NAME = 'ffpos-cache-FF810TH005';
+const CACHE_NAME = 'ffpos-cache-FF810TH006';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -9,7 +9,8 @@ const CORE_ASSETS = [
   './icon-256.png',
   './icon-384.png',
   './icon-512.png',
-  './icon-512-maskable.png'
+  './icon-512-maskable.png',
+  './jameel-noori-kasheeda.woff2'
 ];
 
 self.addEventListener('install', (event) => {

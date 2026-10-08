@@ -13,6 +13,10 @@
 <link id="gfontLink" rel="stylesheet" href="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
+<link rel="preload" href="./jameel-noori-kasheeda.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Jameel Noori Nastaleeq Kasheeda';src:url('./jameel-noori-kasheeda.woff2') format('woff2');font-weight:400 700;font-display:swap;}
+</style>
 <style>
   :root {
     --item-name-size: 11px;
@@ -1096,7 +1100,7 @@
 
   /* ===== URDU NASTALIQ FONT ===== */
   @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
-  .ur { font-family:'Noto Nastaliq Urdu','Arial Unicode MS',Arial,sans-serif; direction:rtl; }
+  .ur { font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu','Arial Unicode MS',Arial,sans-serif; direction:rtl; }
 
   /* ===== LOCK / TRIAL / ACTIVATION OVERLAY ===== */
   .ff-overlay {
@@ -1171,12 +1175,12 @@
   .demo-video-icon { font-size:22px; flex-shrink:0; }
   .demo-video-text { display:flex; flex-direction:column; align-items:center; }
   .demo-video-text .dvt-main {
-    font-family:'Noto Nastaliq Urdu',Arial; direction:rtl;
+    font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial; direction:rtl;
     font-size:14px; font-weight:700; color:#fff;
     line-height:1.3;
   }
   .demo-video-text .dvt-sub {
-    font-family:'Noto Nastaliq Urdu',Arial; direction:rtl;
+    font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial; direction:rtl;
     font-size:10px; color:rgba(255,255,255,0.8); font-weight:400;
   }
 
@@ -1235,7 +1239,7 @@
     width:100%; padding:9px; border:none; border-radius:12px;
     background:linear-gradient(135deg,#43a047,#1b5e20);
     color:#fff; font-size:16px;
-    font-family:'Noto Nastaliq Urdu','Arial Black',Arial;
+    font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu','Arial Black',Arial;
     font-weight:700; direction:rtl;
     cursor:pointer; letter-spacing:.3px;
     box-shadow:0 5px 18px rgba(46,125,50,0.45),0 1px 0 rgba(255,255,255,0.2) inset;
@@ -1246,11 +1250,11 @@
   /* ===== EXPIRED ===== */
   .expired-icon { font-size:52px; margin-bottom:8px; filter:drop-shadow(0 4px 12px rgba(255,0,0,0.4)); }
   .expired-title {
-    font-family:'Noto Nastaliq Urdu','Arial Black',Arial; direction:rtl;
+    font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu','Arial Black',Arial; direction:rtl;
     font-weight:700; font-size:20px; color:#ff6b6b; margin-bottom:6px;
   }
   .expired-sub {
-    font-family:'Noto Nastaliq Urdu',Arial; direction:rtl;
+    font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial; direction:rtl;
     font-size:13px; color:rgba(255,255,255,0.6); margin-bottom:16px; line-height:1.8;
   }
 
@@ -1282,14 +1286,14 @@
     backdrop-filter:blur(20px);
   }
   .owner-title {
-    font-size:16px; font-family:'Noto Nastaliq Urdu','Arial Black',Arial;
+    font-size:16px; font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu','Arial Black',Arial;
     font-weight:700; direction:rtl;
     color:#ffd700; text-align:center; margin-bottom:16px;
     padding-bottom:10px; border-bottom:1px solid rgba(255,153,0,0.2);
   }
   .owner-row { margin-bottom:12px; }
   .owner-lbl {
-    font-size:10px; font-family:'Noto Nastaliq Urdu','Arial Black',Arial;
+    font-size:10px; font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu','Arial Black',Arial;
     font-weight:700; direction:rtl;
     color:rgba(255,200,100,0.65); letter-spacing:.5px; margin-bottom:5px;
   }
@@ -1309,7 +1313,7 @@
   .owner-inp:focus { border-color:#ff9800; background:rgba(255,152,0,0.08); }
   .owner-btn {
     width:100%; padding:13px; border:none; border-radius:12px;
-    font-size:14px; font-family:'Noto Nastaliq Urdu','Arial Black',Arial;
+    font-size:14px; font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu','Arial Black',Arial;
     font-weight:700; direction:rtl; cursor:pointer; margin-bottom:8px;
   }
   .obtn-activate { background:linear-gradient(135deg,#ff9800,var(--accent2)); color:#fff; box-shadow:0 4px 14px rgba(255,152,0,0.4); }
@@ -1317,7 +1321,7 @@
   .owner-divider { border:none; border-top:1px solid rgba(255,255,255,0.07); margin:14px 0; }
   .owner-sub-info {
     background:rgba(0,0,0,0.3); border-radius:10px; padding:10px 12px;
-    font-size:12px; font-family:'Noto Nastaliq Urdu',Arial;
+    font-size:12px; font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;
     color:rgba(255,255,255,0.5); line-height:1.8;
     text-align:center; direction:rtl;
   }
@@ -1347,11 +1351,11 @@
     <div class="ff-ov-msg" id="expActMsg"></div>
     <div style="border-top:1px dashed rgba(255,200,50,0.2);margin:12px 0 10px;"></div>
     <div style="background:rgba(255,200,0,0.06);border:1.5px solid rgba(255,200,0,0.2);border-radius:14px;padding:14px;text-align:center;">
-      <div style="font-size:15px;font-family:'Noto Nastaliq Urdu',Arial;font-weight:700;color:#ffd700;margin-bottom:8px;direction:rtl;">📲 مدد یا سوال کے لیے رابطہ کریں</div>
+      <div style="font-size:15px;font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;font-weight:700;color:#ffd700;margin-bottom:8px;direction:rtl;">📲 مدد یا سوال کے لیے رابطہ کریں</div>
       <button onclick="openGmailCompose()" style="
         display:block;width:100%;background:linear-gradient(135deg,#ea4335,#c62828);
         color:#fff;padding:11px 14px;border-radius:12px;border:none;
-        font-family:'Noto Nastaliq Urdu',Arial;font-weight:700;font-size:13px;direction:rtl;
+        font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;font-weight:700;font-size:13px;direction:rtl;
         cursor:pointer;margin-bottom:8px;text-align:center;
         box-shadow:0 4px 14px rgba(234,67,53,0.4);">
         📧 Gmail پر لکھیں
@@ -1359,7 +1363,7 @@
       <button onclick="openWhatsAppChat()" style="
         display:block;width:100%;background:linear-gradient(135deg,#25d366,#128c45);
         color:#fff;padding:11px 14px;border-radius:12px;border:none;
-        font-family:'Noto Nastaliq Urdu',Arial;font-weight:700;font-size:13px;direction:rtl;
+        font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;font-weight:700;font-size:13px;direction:rtl;
         cursor:pointer;text-align:center;
         box-shadow:0 4px 14px rgba(37,211,102,0.4);">
         💬 WhatsApp پر میسج کریں
@@ -1625,20 +1629,20 @@
   @keyframes ffgPulse{0%,100%{opacity:.45;transform:scale(.9);}50%{opacity:1;transform:scale(1.1);}}
   .ffg-title{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:30px;color:#fff;letter-spacing:2px;text-shadow:0 3px 14px rgba(0,0,0,.5);text-align:center;}
   .ffg-sub{font-family:'Arial Black',Arial,sans-serif;font-size:11px;color:#ffd54f;letter-spacing:3px;margin:4px 0 16px;text-align:center;}
-  .ffg-status{font-family:'Noto Nastaliq Urdu',Arial;direction:rtl;font-size:14px;color:#e3f2fd;text-align:center;line-height:2.1;margin-bottom:12px;min-height:28px;}
+  .ffg-status{font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;direction:rtl;font-size:14px;color:#e3f2fd;text-align:center;line-height:2.1;margin-bottom:12px;min-height:28px;}
   .ffg-status b{color:#ffd54f;}
   .ffg-btn{width:100%;max-width:340px;padding:14px 18px;border:none;border-radius:16px;cursor:pointer;
-    font-family:'Noto Nastaliq Urdu','Arial Black',Arial;font-weight:700;font-size:18px;color:#fff;direction:rtl;
+    font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu','Arial Black',Arial;font-weight:700;font-size:18px;color:#fff;direction:rtl;
     background:linear-gradient(135deg,#ff9800,#e65100);box-shadow:0 6px 0 #8a3000,0 10px 24px rgba(0,0,0,.4);transition:transform .1s;}
   .ffg-btn:active{transform:translateY(3px);box-shadow:0 3px 0 #8a3000;}
   .ffg-btn.green{background:linear-gradient(135deg,#43a047,#1b5e20);box-shadow:0 6px 0 #0a3d0a,0 10px 24px rgba(0,0,0,.4);}
   .ffg-link{margin-top:12px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:22px;
-    padding:8px 18px;font-family:'Noto Nastaliq Urdu',Arial;font-size:13px;cursor:pointer;direction:rtl;}
+    padding:8px 18px;font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;font-size:13px;cursor:pointer;direction:rtl;}
   #ffGatePlans{width:100%;max-width:340px;display:none;flex-direction:column;gap:8px;margin-top:14px;}
   #ffGatePlans.open{display:flex;}
-  .ffg-note{font-family:'Noto Nastaliq Urdu',Arial;direction:rtl;font-size:11px;color:rgba(255,255,255,.78);text-align:center;line-height:1.9;margin-top:4px;}
+  .ffg-note{font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;direction:rtl;font-size:11px;color:rgba(255,255,255,.78);text-align:center;line-height:1.9;margin-top:4px;}
   .ffg-foot{margin-top:16px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
-  .ffg-foot button{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:'Noto Nastaliq Urdu',Arial;}
+  .ffg-foot button{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;}
   .ffg-uid{font-family:'Arial Black',Arial;font-size:11px;color:rgba(255,213,79,.85);letter-spacing:2px;}
   .ffg-close{position:absolute;top:12px;left:12px;display:none;background:rgba(0,0,0,.3);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:20px;padding:4px 12px;font-size:13px;cursor:pointer;}
   #ffGate.inapp .ffg-close{display:block;}
@@ -3141,7 +3145,7 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF810TH005';
+const FF_APP_VERSION = 'FF810TH006';
 (function checkAppVersion(){
   const saved = localStorage.getItem('ff_app_version');
   if(saved !== FF_APP_VERSION){
@@ -9162,7 +9166,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF810TH005';
+const APP_VERSION = 'FF810TH006';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
