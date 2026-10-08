@@ -2821,7 +2821,9 @@ async function refreshSubscriptionStatus(){
     const purchases = await _digitalGoodsService.listPurchases();
     const active = purchases.find(p => _isOurSub(p.itemId));
     if(active){
-      _tryAcknowledge(active);
+      if(active.purchaseToken && localStorage.getItem('ff_play_ack_' + active.purchaseToken.slice(-16)) !== '1'){
+        ackPurchase(active.purchaseToken, active.itemId); // پس منظر میں — ایپ کھلنے کو نہیں روکتا
+      }
       localStorage.setItem('ff_play_active', '1');
       localStorage.setItem('ff_play_plan', active.itemId || '');
     } else {
@@ -2832,18 +2834,61 @@ async function refreshSubscriptionStatus(){
   }catch(e){ _billingErr = 'listPurchases — ' + _errText(e); /* آف لائن — پچھلا کیشڈ نتیجہ استعمال ہوگا */ }
 }
 
-// ---- خریداری کی تصدیق (Acknowledge) — اگر براؤزر یہ سہولت دے تو ایپ سے ہی
-// (ورنہ گوگل تین دن بعد پیسے واپس کر دیتا ہے — مستقل حل سرور سے تصدیق ہے)
-function _tryAcknowledge(purchase){
+// ---- 🔐 خریداری کی تصدیق (Acknowledge) — Cloudflare سرور کے ذریعے ----
+// گوگل کا اصول: ہر خریداری کی تین دن میں تصدیق ورنہ رقم واپس اور سبسکرپشن ختم۔
+// یہ تصدیق ایپ سے نہیں ہو سکتی، اس لیے سرور کرتا ہے۔ ناکام ہو تو ٹوکن قطار میں رہتا ہے
+// اور ایپ ہر بار کھلنے پر دوبارہ بھیجتی ہے جب تک سرور "acknowledged" نہ کہہ دے۔
+const PLAY_VERIFY_URL = 'https://aio-pos-verify.pbtcodelabs.workers.dev';
+const FF_PACKAGE_NAME = 'com.pbtcodelabs.ffpos';
+const FF_ACK_QUEUE_KEY = 'ff_play_ack_queue';
+
+async function verifyPurchaseOnServer(purchaseToken, sku){
+  if(!PLAY_VERIFY_URL || !purchaseToken) return null;
   try{
-    if(!purchase || !purchase.purchaseToken || !_digitalGoodsService) return;
-    if(typeof _digitalGoodsService.acknowledge !== 'function') return;
-    const key = 'ff_play_ack_' + purchase.purchaseToken.slice(-16);
-    if(localStorage.getItem(key) === '1') return;
-    _digitalGoodsService.acknowledge(purchase.purchaseToken, 'onetime')
-      .then(()=>{ localStorage.setItem(key,'1'); })
-      .catch(()=>{});
-  }catch(e){}
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    const res = await fetch(PLAY_VERIFY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ purchaseToken, sku: sku || '', packageName: FF_PACKAGE_NAME }),
+      signal: ctrl.signal
+    });
+    clearTimeout(timer);
+    if(!res.ok) return null;
+    const data = await res.json();
+    return (data && typeof data === 'object') ? data : null;
+  }catch(e){ return null; }
+}
+
+function _ackQueue(){
+  try{ return JSON.parse(localStorage.getItem(FF_ACK_QUEUE_KEY) || '[]') || []; }catch(e){ return []; }
+}
+function _saveAckQueue(list){
+  try{ localStorage.setItem(FF_ACK_QUEUE_KEY, JSON.stringify(list.slice(-20))); }catch(e){}
+}
+function queuePendingPlayAck(purchaseToken, sku){
+  if(!purchaseToken) return;
+  const list = _ackQueue();
+  if(!list.some(x => x.token === purchaseToken)){
+    list.push({ token: purchaseToken, sku: sku || '', at: Date.now() });
+    _saveAckQueue(list);
+  }
+}
+// خریداری کو سرور سے تصدیق کروائیں — نتیجہ نہ ملے تو قطار میں ڈال دیں
+async function ackPurchase(purchaseToken, sku){
+  const ver = await verifyPurchaseOnServer(purchaseToken, sku);
+  if(ver && ver.acknowledged){
+    _saveAckQueue(_ackQueue().filter(x => x.token !== purchaseToken));
+    try{ localStorage.setItem('ff_play_ack_' + purchaseToken.slice(-16), '1'); }catch(e){}
+  } else {
+    queuePendingPlayAck(purchaseToken, sku);
+  }
+  return ver;
+}
+// قطار میں پڑی خریداریاں دوبارہ بھیجیں (ایپ کھلنے پر، پس منظر میں)
+async function flushPendingPlayAcks(){
+  const list = _ackQueue();
+  for(const item of list){ await ackPurchase(item.token, item.sku); }
 }
 
 // ---- ایک Base Plan خریدیں (Play کا اپنا خریداری کا صفحہ کھلے گا) ----
@@ -2862,7 +2907,9 @@ async function purchaseBasePlan(basePlanId){
       { total: { label: 'FF POS Subscription', amount: { currency: 'PKR', value: '0' } } }
     );
     const response = await request.show();
+    const newToken = response && response.details && response.details.purchaseToken;
     await response.complete('success');
+    if(newToken){ ackPurchase(newToken, sku); } // فوراً سرور سے تصدیق (ناکامی پر قطار)
     // Play کو خریداری درج کرنے میں چند سیکنڈ لگ سکتے ہیں — تین بار دوبارہ چیک کریں
     for(let i=0;i<4;i++){
       await refreshSubscriptionStatus();
@@ -2989,7 +3036,7 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF810TH003';
+const FF_APP_VERSION = 'FF810TH004';
 (function checkAppVersion(){
   const saved = localStorage.getItem('ff_app_version');
   if(saved !== FF_APP_VERSION){
@@ -3073,6 +3120,7 @@ async function bootApp(){
 
   await initPlayBilling();
   await refreshSubscriptionStatus();
+  flushPendingPlayAcks(); // پچھلی بار رہ جانے والی تصدیقیں — پس منظر میں
 
   const sub = getSubStatus();
 
@@ -8896,7 +8944,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF810TH003';
+const APP_VERSION = 'FF810TH004';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
