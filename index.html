@@ -3161,6 +3161,13 @@ function closeContactModal(){
 //  صفحہ خود بخود ٹرائل کی شرائط دکھا دیتا ہے، ایپ کے کوڈ کو الگ
 //  سے ٹرائل مینج کرنے کی ضرورت نہیں رہی)
 // ============================================================
+// ============================================================
+// ٹیسٹنگ کا دور: جب تک Play Store سے Production کی اجازت نہیں ملتی، ایپ سب کے لیے بالکل مفت کھلی ہے
+// (نہ ٹرائل، نہ ٹائمر)۔ پیکج پھر بھی پٹی دبا کر دیکھے/خریدے جا سکتے ہیں۔
+// Production کی اجازت ملتے ہی اسے false کر دیں — تب 7 دن کا مفت ٹرائل اور پیکج والا نظام چالو ہو جائے گا۔
+// ============================================================
+const FF_OPEN_FOR_TESTING = true;
+
 // Google Play کی ادا شدہ سبسکرپشن فعال ہے؟
 function _paidActive(){ return localStorage.getItem('ff_play_active') === '1'; }
 
@@ -3254,6 +3261,7 @@ function disableDeveloperUnlock(){
 function getSubStatus(){
   if(isDeveloperUnlocked()) return { active:true, paid:true, trial:false, dev:true, expired:false, neverActivated:false }; // FF910FR010
   if(_paidActive()) return { active:true, paid:true, trial:false, expired:false, neverActivated:false };
+  if(FF_OPEN_FOR_TESTING) return { active:true, paid:false, trial:false, open:true, expired:false, neverActivated:false };
   const ft = getFreeTrial();
   if(ft.active) return { active:true, paid:false, trial:true, expired:false, neverActivated:false };
   const everChecked = localStorage.getItem('ff_play_ever_checked') === '1';
@@ -3284,7 +3292,7 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF910FR011';
+const FF_APP_VERSION = 'FF1010SA012';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -3444,7 +3452,9 @@ function _updateGateStatus(){
   const st = document.getElementById('ffGateStatus');
   if(!st || window._gateChecking) return;
   const sub = getSubStatus(), info = getSubInfo(), d = _daysLeft(info), ft = getFreeTrial();
-  if(sub.trial){
+  if(sub.open){
+    st.innerHTML = '🧪 ٹیسٹنگ کا دور — ایپ <b>مکمل مفت</b> کھلی ہے<br>چاہیں تو نیچے سے پیکج آزما سکتے ہیں';
+  } else if(sub.trial){
     st.innerHTML = '🎁 مفت ٹرائل چل رہا ہے — باقی دن: <b>' + ft.daysLeft + '</b><br>ختم: <b>' + _dmy(_isoDay(ft.end)) + '</b> — چاہیں تو ابھی سے پیکج لے لیں';
   } else if(sub.active){
     const plan = info && FF_PLAN_NAMES[info.productId] ? FF_PLAN_NAMES[info.productId] : '';
@@ -3540,6 +3550,11 @@ function showSubStatusBar(){
   if(!sub.active){ bar.className = 'sub-status-bar'; return; }
   if(sub.dev){ bar.onclick = null; bar.innerHTML = '<span>🛠️ Developer Unlock — never expires</span>'; bar.className = 'sub-status-bar show ffs'; return; } // FF910FR010
   bar.onclick = function(){ showGate(true); };   // پٹی دبانے پر پیکج/اپگریڈ
+  if(sub.open){
+    bar.innerHTML = '<span>🧪 ٹیسٹنگ کا دور — ایپ مکمل مفت کھلی ہے • پیکج دیکھنے کے لیے یہاں دبائیں</span>';
+    bar.className = 'sub-status-bar show ffs';
+    return;
+  }
   if(sub.trial){
     const ft = getFreeTrial();
     if(ft.daysLeft <= 3){
@@ -3576,6 +3591,7 @@ function updateSettingsSubInfo(){
   const el  = document.getElementById('settingsSubStatus');
   if(!el) return;
   if(sub.dev){ el.style.color = '#2e7d32'; el.textContent = '🛠️ Developer Unlock'; return; } // FF910FR010
+  if(sub.open){ el.style.color = '#2e7d32'; el.textContent = '🧪 ٹیسٹنگ کا دور — مکمل مفت'; return; }
   if(sub.trial){
     el.style.color = '#2e7d32';
     const ft = getFreeTrial();
@@ -3666,7 +3682,9 @@ function refreshOwnerPanel(){
 
   const sub = getSubStatus();
   const info = document.getElementById('ownerSubInfo');
-  if(sub.trial){
+  if(sub.open){
+    info.innerHTML = '<b style="color:#66bb6a;">🧪 ٹیسٹنگ کا دور — مکمل مفت</b>';
+  } else if(sub.trial){
     info.innerHTML = '<b style="color:#66bb6a;">🎁 مفت ٹرائل — ' + getFreeTrial().daysLeft + ' دن باقی</b>';
   } else if(sub.active){
     info.innerHTML = '<b style="color:#66bb6a;">✅ فعال (Google Play)</b>';
@@ -9370,7 +9388,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF910FR011';
+const APP_VERSION = 'FF1010SA012';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
