@@ -1339,6 +1339,26 @@
 
 
 
+<!-- ===== FF910FR010: 🛠️ DEVELOPER CONSOLE — گیٹ پر ورژن نمبر پر 7 ٹیپ سے کھلتا ہے، صرف ڈویلپر کے لیے ===== -->
+<div id="devConsoleModal" onclick="if(event.target===this) closeDevConsole()" style="display:none;position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;color:#0f172a;border-radius:16px;padding:18px;width:100%;max-width:330px;box-shadow:0 10px 30px rgba(0,0,0,.4);font-family:Arial,sans-serif;direction:ltr;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div style="font-size:18px;font-weight:900;">🛠️ Developer Console</div>
+      <span onclick="closeDevConsole()" style="cursor:pointer;font-size:18px;font-weight:900;">✖</span>
+    </div>
+    <div id="devConsoleLocked">
+      <input type="password" id="devConsolePass" inputmode="numeric" autocomplete="off" placeholder="Developer password" onkeydown="if(event.key==='Enter') submitDevConsolePass()"
+             style="width:100%;box-sizing:border-box;padding:11px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:15px;text-align:center;letter-spacing:3px;margin-bottom:8px;">
+      <div id="devConsoleErr" style="display:none;color:#dc2626;font-size:12px;font-weight:700;text-align:center;margin-bottom:8px;">❌ Wrong password</div>
+      <button type="button" id="devConsoleBtn" onclick="submitDevConsolePass()" style="width:100%;padding:11px;border:none;border-radius:10px;background:#1b5e20;color:#fff;font-weight:800;font-size:14px;cursor:pointer;">Unlock</button>
+    </div>
+    <div id="devConsoleOpen" style="display:none;">
+      <div style="background:#dcfce7;color:#166534;border-radius:10px;padding:10px;font-weight:800;font-size:13px;text-align:center;margin-bottom:10px;">✅ Developer Unlock is active on this phone<br><span style="font-weight:600;font-size:11.5px;">The app will never expire here.</span></div>
+      <button type="button" onclick="disableDeveloperUnlock()" style="width:100%;padding:10px;border:1.5px solid #fca5a5;border-radius:10px;background:#fff;color:#b91c1c;font-weight:800;font-size:13px;cursor:pointer;">Turn off Developer Unlock</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== TRIAL EXPIRED SCREEN ===== -->
 <div class="ff-overlay hidden" id="expiredOverlay">
   <div class="ff-overlay-card">
@@ -1661,7 +1681,7 @@
   <i class="ffg-spark" style="top:78%;left:88%;animation-delay:2.2s"></i>
   <i class="ffg-spark" style="top:44%;left:92%;animation-delay:1.1s"></i>
   <button type="button" class="ffg-close" onclick="closeGate()">✕ واپس</button>
-  <div class="ffg-ver" id="gateVer">—</div>
+  <div class="ffg-ver" id="gateVer" onclick="devConsoleBadgeTap()" style="user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;">—</div>
   <div class="ffg-logo-wrap">
     <div class="ffg-ring2"></div>
     <div class="ffg-glow"></div>
@@ -3149,7 +3169,61 @@ function startFreeTrial(){
 }
 function _isoDay(ms){ const d = new Date(ms); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 
+// ============================================================
+// FF910FR010: 🛠️ DEVELOPER CONSOLE — گیٹ پر ورژن پر 7 ٹیپ + پاس ورڈ (کوڈ میں صرف PBKDF2 ہیش)
+// ============================================================
+const DEV_UNLOCK_SALT = 'AIO-DEV-UNLOCK-v1';
+const DEV_UNLOCK_HASH = 'ec6bf74a5d10d1524fbae3dd818a3be18c04bd13a6bc3242dd0e5d9fe6532a85';
+function isDeveloperUnlocked(){ try{ return localStorage.getItem('ff_dev_unlock') === '1'; }catch(e){ return false; } }
+let _devTapCount = 0, _devTapTimer = null;
+function devConsoleBadgeTap(){
+  _devTapCount++;
+  clearTimeout(_devTapTimer);
+  _devTapTimer = setTimeout(()=>{ _devTapCount = 0; }, 2500);
+  if(_devTapCount >= 7){ _devTapCount = 0; openDevConsole(); }
+}
+function openDevConsole(){
+  const unlocked = isDeveloperUnlocked();
+  document.getElementById('devConsoleLocked').style.display = unlocked ? 'none' : 'block';
+  document.getElementById('devConsoleOpen').style.display = unlocked ? 'block' : 'none';
+  document.getElementById('devConsoleErr').style.display = 'none';
+  const inp = document.getElementById('devConsolePass'); inp.value = '';
+  document.getElementById('devConsoleModal').style.display = 'flex';
+  if(!unlocked) setTimeout(()=>inp.focus(), 150);
+}
+function closeDevConsole(){ document.getElementById('devConsoleModal').style.display = 'none'; }
+async function devPassMatches(pass){
+  try{
+    if(!(window.crypto && crypto.subtle)) return false;
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:enc.encode(DEV_UNLOCK_SALT), iterations:200000}, key, 256);
+    return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,'0')).join('') === DEV_UNLOCK_HASH;
+  }catch(e){ return false; }
+}
+async function submitDevConsolePass(){
+  const btn = document.getElementById('devConsoleBtn');
+  const pass = document.getElementById('devConsolePass').value.trim();
+  if(!pass) return;
+  btn.disabled = true; btn.textContent = 'Checking…';
+  const ok = await devPassMatches(pass);
+  btn.disabled = false; btn.textContent = 'Unlock';
+  if(!ok){ document.getElementById('devConsoleErr').style.display = 'block'; return; }
+  try{ localStorage.setItem('ff_dev_unlock', '1'); }catch(e){}
+  closeDevConsole();
+  try{ closeGate(); }catch(e){}
+  try{ unlockApp(); }catch(e){}
+  try{ showSubStatusBar(); updateSettingsSubInfo(); }catch(e){}
+  alert('✅ Developer Unlock is now active on this phone.');
+}
+function disableDeveloperUnlock(){
+  if(!confirm('Turn off Developer Unlock on this phone?')) return;
+  try{ localStorage.removeItem('ff_dev_unlock'); }catch(e){}
+  location.reload();
+}
+
 function getSubStatus(){
+  if(isDeveloperUnlocked()) return { active:true, paid:true, trial:false, dev:true, expired:false, neverActivated:false }; // FF910FR010
   if(_paidActive()) return { active:true, paid:true, trial:false, expired:false, neverActivated:false };
   const ft = getFreeTrial();
   if(ft.active) return { active:true, paid:false, trial:true, expired:false, neverActivated:false };
@@ -3181,7 +3255,7 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF810TH009';
+const FF_APP_VERSION = 'FF910FR010';
 (function checkAppVersion(){
   const saved = localStorage.getItem('ff_app_version');
   if(saved !== FF_APP_VERSION){
@@ -3409,6 +3483,7 @@ function showSubStatusBar(){
   if(!bar) return;
   const sub = getSubStatus();
   if(!sub.active){ bar.className = 'sub-status-bar'; return; }
+  if(sub.dev){ bar.onclick = null; bar.innerHTML = '<span>🛠️ Developer Unlock — never expires</span>'; bar.className = 'sub-status-bar show ffs'; return; } // FF910FR010
   bar.onclick = function(){ showGate(true); };   // پٹی دبانے پر پیکج/اپگریڈ
   if(sub.trial){
     const ft = getFreeTrial();
@@ -3445,6 +3520,7 @@ function updateSettingsSubInfo(){
   const sub = getSubStatus();
   const el  = document.getElementById('settingsSubStatus');
   if(!el) return;
+  if(sub.dev){ el.style.color = '#2e7d32'; el.textContent = '🛠️ Developer Unlock'; return; } // FF910FR010
   if(sub.trial){
     el.style.color = '#2e7d32';
     const ft = getFreeTrial();
@@ -9239,7 +9315,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF810TH009';
+const APP_VERSION = 'FF910FR010';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
