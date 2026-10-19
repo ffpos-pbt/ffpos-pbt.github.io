@@ -1480,6 +1480,7 @@
         💬 WhatsApp پر میسج کریں
       </button>
     </div>
+    <div class="ff-ov-ver" style="text-align:center;margin-top:12px;font-family:'Arial Black',Arial;font-size:12px;color:#c69500;letter-spacing:1px;direction:ltr;">—</div>
   </div>
 </div>
 
@@ -1487,6 +1488,7 @@
 <div class="ff-overlay hidden" id="setupOverlay" style="
   background: linear-gradient(160deg,#001a8c 0%,#0033cc 40%,#0055ff 70%,#0033cc 100%);
   align-items:center; justify-content:center; padding:16px 14px; overflow-y:auto;">
+  <div class="ff-ov-ver" style="position:fixed;bottom:8px;left:0;right:0;text-align:center;z-index:10001;font-family:'Arial Black',Arial;font-size:12px;color:#ffd54f;letter-spacing:1px;direction:ltr;pointer-events:none;">—</div>
 
   <!-- ═══ CHAT WITH DEVELOPER — Login/Activation Page ═══ -->
   <div id="loginDevChatWrap" style="position:fixed; top:9px; left:10px; z-index:10001; display:flex; align-items:center; gap:8px;">
@@ -3387,9 +3389,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF1910MO015';
+const FF_APP_VERSION = 'FF1910MO016';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Free for testers — no trial or subscription screen until Play Store launch';
+const FF_UPDATE_NOTE = 'Version number now shown on every screen, including subscription and setup';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -3413,6 +3415,8 @@ function ffCloseUpdBar(){ const b = document.getElementById('ffUpdBar'); if(b) b
   }
   // براؤزر ٹیب کا عنوان بھی ہمیشہ تازہ ترین ورژن کے ساتھ اپڈیٹ رکھیں
   document.title = 'FFPOS — ' + FF_APP_VERSION;
+  // ہر اسکرین (سبسکرپشن ختم / پہلی بار) پر بھی ورژن نظر آئے
+  document.querySelectorAll('.ff-ov-ver').forEach(el=>{ el.textContent = FF_APP_VERSION; });
 })();
 
 // ============================================================
@@ -9705,7 +9709,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF1910MO015';
+const APP_VERSION = 'FF1910MO016';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
