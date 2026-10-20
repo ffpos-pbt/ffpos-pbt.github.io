@@ -16,6 +16,7 @@
 <link rel="preload" href="./jameel-noori-kasheeda.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:'Jameel Noori Nastaleeq Kasheeda';src:url('./jameel-noori-kasheeda.woff2') format('woff2');font-weight:400 700;font-display:swap;}
+@font-face{font-family:'FF Urdu Kasheeda';src:url('./jameel-noori-kasheeda.woff2') format('woff2');font-weight:400 900;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF;}
 </style>
 <style>
   :root {
@@ -2624,12 +2625,12 @@
       </div>
       <!-- 🟢 WhatsApp Share — ایک ہی بٹن، کمپیکٹ (Android کی حد کی وجہ سے نمبر پر براہ راست چیٹ کھولنا ممکن نہیں) -->
       <button type="button" id="bpWaShareBtn" onclick="shareOnWhatsApp()" style="display:none;
-        width:100%;padding:7px 4px;border:none;border-radius:9px;margin-top:4px;
+        width:100%;padding:9px 4px;border:none;border-radius:9px;margin-top:4px;
         background:linear-gradient(160deg,#25d366,#128c7e);
-        color:#fff;font-size:11.5px;font-family:var(--font-black);font-weight:900;
+        color:#fff;font-size:13px;font-family:var(--font-black);font-weight:900;
         cursor:pointer;box-shadow:0 2px 6px rgba(37,211,102,0.4);
         display:flex;align-items:center;justify-content:center;gap:5px;">
-        <span>💬 WhatsApp Share</span>
+        <span>💬 WhatsApp پر بل بھیجیں</span>
       </button>
       <!-- مین پرنٹ بٹن — پوری چوڑائی (پرنٹر موجود ہو) -->
       <button type="button" class="bpf-print" id="bpfPrintBtn" onclick="executePrint()" disabled style="margin-top:4px;padding-top:8px;padding-bottom:8px;">
@@ -3389,9 +3390,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF1910MO016';
+const FF_APP_VERSION = 'FF2010TU017';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Version number now shown on every screen, including subscription and setup';
+const FF_UPDATE_NOTE = 'WhatsApp share button on every bill — bill image in your theme colour with Urdu in Noori Nastaleeq Kasheeda';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -5563,8 +5564,7 @@ function _showFallbackPreview(sale){
 // WhatsApp بٹن دکھائیں/چھپائیں — کسٹمر نمبر لکھتے وقت بھی فوری اپڈیٹ ہو
 function _refreshWaButtons(sale){
   const waBtn = document.getElementById('bpWaShareBtn');
-  const isDelivery = sale && sale.table==='D';
-  if(waBtn) waBtn.style.display = isDelivery ? 'flex' : 'none';
+  if(waBtn) waBtn.style.display = 'flex'; // ہر بل (کاؤنٹر، ٹیبل، ڈلیوری) پر واٹس ایپ شیئر
 }
 
 // صرف پرنٹ کریں — بل کی حالت (Pending/Cash) کو ہاتھ نہیں لگاتا
@@ -5870,7 +5870,7 @@ function buildBillHtml(sale){
   // IMG فونٹ کو ترجیح دیں — یہ واٹس ایپ امیج اور پریویو دونوں کا فونٹ ہے
   const _selFont = FONTS.find(x=>x.id===currentFontId)||FONTS[0];
   let _billFont;
-  if(_imgFont === 'urdu')         _billFont = "'Noto Nastaliq Urdu', Arial, sans-serif";
+  if(_imgFont === 'urdu')         _billFont = "'Jameel Noori Nastaleeq Kasheeda', 'Noto Nastaliq Urdu', Arial, sans-serif";
   else if(_imgFont === 'arial-black')  _billFont = "'Arial Black', Arial, sans-serif";
   else if(_imgFont === 'arial-narrow') _billFont = "'Arial Narrow', Arial, sans-serif";
   else if(_imgFont === 'arial')        _billFont = "Arial, sans-serif";
@@ -6355,8 +6355,34 @@ function _applyBillFontSize(){
 function _getFontFamily(id){
   if(id==='arial-black')  return "'Arial Black', Arial, sans-serif";
   if(id==='arial-narrow') return "'Arial Narrow', Arial, sans-serif";
-  if(id==='urdu')         return "'Noto Nastaliq Urdu', Arial, sans-serif";
+  if(id==='urdu')         return "'Jameel Noori Nastaleeq Kasheeda', 'Noto Nastaliq Urdu', Arial, sans-serif";
   return "'Arial Black', Arial, sans-serif";
+}
+// انگریزی + اردو ملا نام (مثلاً "Chicken shawarma چکن شوارما") — اردو حصہ نوری نستعلیق کشیدہ میں
+// پونے دو گنا بڑا، تاکہ انگریزی کے برابر صاف پڑھا جائے۔ خانے میں نہ سمائے تو دونوں ساتھ چھوٹے ہوں۔
+const _URDU_RE = /[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/;
+function _drawMixedUrdu(ctx, text, x, midY, fs, latinFam, maxW, align){
+  const runs = text.split(/([\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF][\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF\s]*)/).filter(r=>r);
+  const UR = 1.7, urFam = "'FF Urdu Kasheeda', 'Jameel Noori Nastaleeq Kasheeda', 'Noto Nastaliq Urdu', serif";
+  const fontOf = (r,f)=> _URDU_RE.test(r) ? `700 ${Math.round(f*UR)}px ${urFam}` : `900 ${f}px ${latinFam}`;
+  const widthAt = f => runs.reduce((w,r)=>{ ctx.font = fontOf(r,f); return w + ctx.measureText(r).width; }, 0);
+  while(fs > 8 && widthAt(fs) > maxW) fs--;
+  const total = widthAt(fs);
+  let cx = align==='right' ? x - total : x;
+  const oldBase = ctx.textBaseline, oldAlign = ctx.textAlign;
+  ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+  runs.forEach(r=>{
+    ctx.font = fontOf(r,fs);
+    const ur = _URDU_RE.test(r);
+    ctx.fillText(r, cx, ur ? midY + Math.round(fs*0.15) : midY);
+    cx += ctx.measureText(r).width;
+  });
+  ctx.textBaseline = oldBase; ctx.textAlign = oldAlign;
+}
+// شیئر/واٹس ایپ تصویر: انگریزی منتخب فونٹ میں، اردو حروف ہمیشہ نوری نستعلیق کشیدہ میں
+function _getShareFontFamily(id){
+  if(id==='urdu') return _getFontFamily(id);
+  return _getFontFamily(id).replace(/, Arial, sans-serif$/, ", 'FF Urdu Kasheeda', Arial, sans-serif");
 }
 
 // ============================================================
@@ -6404,7 +6430,7 @@ function _buildBillCanvas(sale, forPrint, lightMode, printWidthPx){
     // پرنٹ کے لیے — نستعلیق کی باریک/پیچیدہ لکیریں تھرمل ڈاٹس پر دھندلا سکتی ہیں،
     // اس لیے پرنٹ کے وقت صاف/سادہ (پرانے نسخ جیسا) فونٹ استعمال ہوتا ہے (AIO POS کی طرح)۔
     // اسکرین/شیئر پر ہمیشہ منتخب شدہ اصل نستعلیق فونٹ ہی نظر آتا رہے گا — یہ صرف پرنٹ کینوس کے لیے خاص ہے۔
-    const fontFam = (forPrint && isUrdu) ? 'Arial, sans-serif' : _getFontFamily(_imgFont);
+    const fontFam = (forPrint && isUrdu) ? 'Arial, sans-serif' : (forPrint ? _getFontFamily(_imgFont) : _getShareFontFamily(_imgFont));
     const printPlainFont = !!(forPrint && isUrdu);
     lightMode = !!lightMode;
 
@@ -6418,8 +6444,8 @@ function _buildBillCanvas(sale, forPrint, lightMode, printWidthPx){
     const RS = (n) => Math.round(n * rscale);
 
     // اردو فونٹ لوڈ کریں اگر منتخب ہو (پرنٹ کے لیے سادہ فونٹ استعمال ہو تو لوڈ کی ضرورت نہیں)
-    const fontPromise = (isUrdu && !printPlainFont && document.fonts && document.fonts.load)
-      ? document.fonts.load('700 16px "Noto Nastaliq Urdu"').catch(()=>{})
+    const fontPromise = (!forPrint && document.fonts && document.fonts.load)
+      ? Promise.race([document.fonts.load('700 16px "FF Urdu Kasheeda"', 'اردو').catch(()=>{}), new Promise(r=>setTimeout(r,4000))])
       : Promise.resolve();
 
     fontPromise.then(()=>{
@@ -6736,7 +6762,7 @@ function _buildBillCanvas(sale, forPrint, lightMode, printWidthPx){
       cols.forEach((c,i)=>{
         let val='';
         if(c.k==='sno')   val = String(idx+1);
-        if(c.k==='item')  val = String(it.name||'').slice(0,22);
+        if(c.k==='item')  val = String(it.name||'');
         if(c.k==='qty')   val = String(it.qty||'');
         if(c.k==='price') val = String(it.price);
         if(c.k==='total') val = String(it.total);
@@ -6746,7 +6772,20 @@ function _buildBillCanvas(sale, forPrint, lightMode, printWidthPx){
         const tx = c.k==='item'
           ? (isUrdu ? colX[i]+iW*c.w-6 : colX[i]+6)
           : colX[i] + iW*c.w/2;
-        ctx.fillText(val, tx, rowTop + ROW_H/2 - S(7));
+        if(c.k==='item'){
+          // پورا نام دکھائیں (اردو آدھا نہ کٹے) — خانے میں نہ سمائے تو فونٹ تھوڑا چھوٹا کریں
+          const avail = iW*c.w - 12;
+          let fs = isUrdu ? S(14) : S(13);
+          if(!forPrint && !isUrdu && _URDU_RE.test(val)){
+            _drawMixedUrdu(ctx, val, tx, rowTop + ROW_H/2, fs, fontFam, avail, align);
+          } else {
+            while(fs > 8 && ctx.measureText(val).width > avail){ fs--; ctx.font = (isUrdu?'700 ':'900 ') + fs + 'px ' + fontFam; }
+            ctx.fillText(val, tx, rowTop + ROW_H/2 - S(7), avail);
+          }
+          ctx.font = isUrdu ? `700 ${S(14)}px ${fontFam}` : `900 ${S(13)}px ${fontFam}`;
+        } else {
+          ctx.fillText(val, tx, rowTop + ROW_H/2 - S(7));
+        }
       });
 
       // bottom border — پرنٹ پر ٹھوس بھرا ہوا rectangle (کبھی antialiasing سے مدھم نہیں ہوتا)
@@ -6895,6 +6934,7 @@ function _buildBillCanvas(sale, forPrint, lightMode, printWidthPx){
 
 async function shareOnWhatsApp(){
   if(!pendingSale){ showToast('⚠️ کوئی بل موجود نہیں'); return; }
+  if(pendingSale.customerMobile && pendingSale.customerMobile.replace(/[^0-9]/g,'').length>=10) return _shareBillImageToCustomer();
   try{
     const shareSale = {...pendingSale, mode: pendingSale.mode || 'cash'};
     const canvas = await _buildBillCanvas(shareSale);
@@ -9709,7 +9749,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF1910MO016';
+const APP_VERSION = 'FF2010TU017';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
