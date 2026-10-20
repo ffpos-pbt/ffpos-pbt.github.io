@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FF POS — ٹیسٹر بنیں</title>
+<meta name="description" content="FF POS کے خاص ٹیسٹر بنیں — ٹیسٹنگ میں شامل ہوں اور ڈویلپر کو پرائیویٹ فیڈ بیک دیں">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ffpos-pbt.github.io/testers.html">
+<meta property="og:title" content="FF POS — آپ ہمارے خاص ٹیسٹر ہیں 🌸">
+<meta property="og:description" content="ٹیسٹنگ میں شامل ہوں، روز دو چار منٹ استعمال کریں اور پرائیویٹ فیڈ بیک دیں">
+<meta property="og:image" content="https://ffpos-pbt.github.io/testers-poster.jpg">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1920">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@font-face{font-family:K;src:url('./jameel-noori-kasheeda.woff2') format('woff2');font-display:swap}
+*{box-sizing:border-box}
+body{margin:0;background:#fff3e0;font-family:K,'Noto Nastaliq Urdu',serif;color:#3e2414}
+.wrap{max-width:520px;margin:0 auto;padding:12px 14px 30px}
+img{width:100%;display:block;border-radius:18px;box-shadow:0 6px 20px rgba(191,54,12,.2)}
+.btn{display:block;text-decoration:none;text-align:center;color:#fff;border:none;width:100%;font-family:inherit;font-size:22px;line-height:1.9;padding:8px 10px 14px;border-radius:16px;margin-top:12px;cursor:pointer}
+.b1{background:linear-gradient(135deg,#ff8f00,#e65100);box-shadow:0 5px 0 #a33a00}
+.b2{background:linear-gradient(135deg,#43a047,#1b5e20);box-shadow:0 5px 0 #0f3d12}
+.b3{background:linear-gradient(135deg,#25d366,#128c7e);box-shadow:0 5px 0 #0b5e55}
+.hint{text-align:center;font-size:17px;line-height:1.9;margin:6px 4px 0;color:#5d4037}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="btn b1" href="https://play.google.com/apps/testing/com.pbtcodelabs.ffpos">1️⃣ ٹیسٹنگ میں شامل ہونے کے لیے یہاں دبائیں</a>
+  <a class="btn b2" href="https://play.google.com/store/apps/details?id=com.pbtcodelabs.ffpos">2️⃣ ڈویلپر کو پرائیویٹ فیڈ بیک دینے کے لیے یہاں دبائیں</a>
+  <div class="hint">پلے اسٹور کھلے تو نیچے «Send private feedback» دبا کر اپنی رائے لکھیں</div>
+  <div style="height:14px"></div>
+  <img src="testers-poster.jpg" alt="FF POS ٹیسٹرز پوسٹر">
+  <button class="btn b3" onclick="sharePoster()">💬 یہ پوسٹر واٹس ایپ پر آگے بھیجیں</button>
+</div>
+<script>
+const PAGE = 'https://ffpos-pbt.github.io/testers.html';
+const TEXT = 'السلام علیکم! FF POS کے ٹیسٹر بنیں 🌸 یہ لنک کھولیں:\n' + PAGE;
+async function sharePoster(){
+  try{
+    const blob = await (await fetch('testers-poster.jpg')).blob();
+    const file = new File([blob], 'FF-POS-Testers.jpg', {type:'image/jpeg'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], text:TEXT}); return;
+    }
+  }catch(e){ if(e && e.name==='AbortError') return; }
+  location.href = 'https://wa.me/?text=' + encodeURIComponent(TEXT);
+}
+</script>
+</body>
+</html>
