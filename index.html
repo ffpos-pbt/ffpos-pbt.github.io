@@ -1955,7 +1955,7 @@
           <span id="netStatusDot" style="width:9px;height:9px;border-radius:50%;display:inline-block;background:#4caf50;box-shadow:0 0 6px #4caf50;"></span>
           <span id="netStatusText" style="font-size:11px;font-weight:900;color:#fff;letter-spacing:.5px;">ONLINE</span>
         </div>
-        <span id="appVersionLabel" style="font-size:10.5px;font-weight:900;color:#ffd54f;letter-spacing:.5px;text-shadow:0 1px 2px rgba(0,0,0,0.5);"></span>
+        <span id="appVersionLabel" onclick="devConsoleBadgeTap()" style="user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:default;font-size:10.5px;font-weight:900;color:#ffd54f;letter-spacing:.5px;text-shadow:0 1px 2px rgba(0,0,0,0.5);"></span>
         <button type="button" onclick="shareAppPoster()" title="ایپ شیئر کریں" style="
           width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.6);
           background:linear-gradient(145deg,#ffe082,#ffa000);color:#3a2600;cursor:pointer;padding:0;
@@ -2485,7 +2485,7 @@
 
     <div class="settings-card">
       <h3 id="aboutHeading5tap" onclick="ownerSecretTap()" style="cursor:default;user-select:none;-webkit-tap-highlight-color:transparent;">ℹ️ ABOUT</h3>
-      <div class="summary-row"><span class="label">App Version</span><span class="val" id="appVersionVal">—</span></div>
+      <div class="summary-row"><span class="label">App Version</span><span class="val" id="appVersionVal" onclick="devConsoleBadgeTap()" style="user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;">—</span></div>
       <div class="summary-row" style="margin-top:4px;">
         <span class="label">Your User ID</span>
         <span style="font-family:var(--font-black);font-weight:900;font-size:16px;color:#e65100;letter-spacing:2px;" id="settingsUidDisplay">——</span>
@@ -3391,9 +3391,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF2110WE018';
+const FF_APP_VERSION = 'FF2110WE019';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Bill total and Print bar now always visible above the bottom buttons on every phone';
+const FF_UPDATE_NOTE = 'Developer Unlock can now be turned off — tap the green top strip or the Subscription line in Settings';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -3642,7 +3642,7 @@ function showSubStatusBar(){
   if(!bar) return;
   const sub = getSubStatus();
   if(!sub.active){ bar.className = 'sub-status-bar'; return; }
-  if(sub.dev){ bar.onclick = null; bar.innerHTML = '<span>🛠️ Developer Unlock — never expires</span>'; bar.className = 'sub-status-bar show ffs'; return; } // FF910FR010
+  if(sub.dev){ bar.onclick = openDevConsole; bar.innerHTML = '<span>🛠️ Developer Unlock — never expires (بند کرنے کے لیے ٹیپ کریں)</span>'; bar.className = 'sub-status-bar show ffs'; return; } // FF910FR010
   bar.onclick = function(){ showGate(true); };   // پٹی دبانے پر پیکج/اپگریڈ
   if(sub.open){
     bar.innerHTML = '<span>🧪 ٹیسٹنگ کا دور — ایپ مکمل مفت کھلی ہے • پیکج دیکھنے کے لیے یہاں دبائیں</span>';
@@ -3684,7 +3684,8 @@ function updateSettingsSubInfo(){
   const sub = getSubStatus();
   const el  = document.getElementById('settingsSubStatus');
   if(!el) return;
-  if(sub.dev){ el.style.color = '#2e7d32'; el.textContent = '🛠️ Developer Unlock'; return; } // FF910FR010
+  el.onclick = null; el.style.cursor = '';
+  if(sub.dev){ el.style.color = '#2e7d32'; el.textContent = '🛠️ Developer Unlock (بند کرنے کے لیے ٹیپ کریں)'; el.style.cursor = 'pointer'; el.onclick = openDevConsole; return; } // FF910FR010
   if(sub.open){ el.style.color = '#2e7d32'; el.textContent = '🧪 ٹیسٹنگ کا دور — مکمل مفت'; return; }
   if(sub.trial){
     el.style.color = '#2e7d32';
@@ -9750,7 +9751,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF2110WE018';
+const APP_VERSION = 'FF2110WE019';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
