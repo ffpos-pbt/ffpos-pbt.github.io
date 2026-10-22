@@ -3391,9 +3391,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF2210TH020';
+const FF_APP_VERSION = 'FF2210TH021';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Daily reminder during testing: how to give feedback on Play Store';
+const FF_UPDATE_NOTE = 'Small design touch-ups in the feedback reminder and bill message';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -5671,7 +5671,7 @@ function _shareToCustomerWhatsApp(){
   if(pendingSale.advancePaid){ lines.push('✅ Payment Received'); } else { lines.push('🕓 Cash on Delivery (COD)'); }
   if(pendingSale.deliveryBoyName){ lines.push(''); lines.push('🛵 Delivery Boy: '+pendingSale.deliveryBoyName+' — '+pendingSale.deliveryBoyMobile); }
   lines.push('');
-  lines.push('شکریہ! 🙏');
+  lines.push('شکریہ! 🌹');
   const text = encodeURIComponent(lines.join('\n'));
   window.open('https://wa.me/'+num+'?text='+text, '_blank');
 }
@@ -9751,7 +9751,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF2210TH020';
+const APP_VERSION = 'FF2210TH021';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10199,7 +10199,7 @@ if ('serviceWorker' in navigator) {
 <div id="fbNudge" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:14px;">
   <div style="background:linear-gradient(170deg,#fffaf2,#fff1dc);border:4px solid #e67e22;border-radius:26px;max-width:380px;width:100%;padding:14px 16px 16px;text-align:center;direction:rtl;font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',serif;color:#3e2414;box-shadow:0 10px 40px rgba(0,0,0,.4);max-height:92vh;overflow-y:auto;">
     <img src="icon-192.png" alt="" style="width:64px;height:64px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.2);">
-    <div style="font-size:26px;color:#bf360c;line-height:1.7;margin-top:2px;">آپ کی مدد چاہیے 🙏</div>
+    <div style="font-size:26px;color:#bf360c;line-height:1.7;margin-top:2px;">آپ کی مدد چاہیے 🤝</div>
     <div style="font-size:16px;line-height:1.9;color:#6d3b1a;">FF POS پلے اسٹور پر لائیو ہونے والی ہے۔ پلے اسٹور پر اپنی رائے ضرور دیں</div>
     <div style="background:#fff;border:2px solid #a5d6a7;border-radius:16px;padding:4px 12px 8px;margin:10px 0;text-align:right;font-size:16px;line-height:2.05;">
       <div>1️⃣ پلے اسٹور کھولیں، اوپر اپنی تصویر دبائیں</div>
