@@ -3391,9 +3391,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF2110WE019';
+const FF_APP_VERSION = 'FF2210TH020';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Developer Unlock can now be turned off — tap the green top strip or the Subscription line in Settings';
+const FF_UPDATE_NOTE = 'Daily reminder during testing: how to give feedback on Play Store';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9751,7 +9751,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF2110WE019';
+const APP_VERSION = 'FF2210TH020';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10193,6 +10193,51 @@ if ('serviceWorker' in navigator) {
   const bar = document.getElementById('bottomActionBar');
   if(bar && window.ResizeObserver) new ResizeObserver(fit).observe(bar);
   [100, 400, 1000, 2500].forEach(t => setTimeout(fit, t));
+})();
+</script>
+<!-- 🌸 ٹیسٹنگ کے دور میں دن میں ایک بار: پلے اسٹور پر رائے دینے کی یاد دہانی -->
+<div id="fbNudge" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:14px;">
+  <div style="background:linear-gradient(170deg,#fffaf2,#fff1dc);border:4px solid #e67e22;border-radius:26px;max-width:380px;width:100%;padding:14px 16px 16px;text-align:center;direction:rtl;font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',serif;color:#3e2414;box-shadow:0 10px 40px rgba(0,0,0,.4);max-height:92vh;overflow-y:auto;">
+    <img src="icon-192.png" alt="" style="width:64px;height:64px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.2);">
+    <div style="font-size:26px;color:#bf360c;line-height:1.7;margin-top:2px;">آپ کی مدد چاہیے 🙏</div>
+    <div style="font-size:16px;line-height:1.9;color:#6d3b1a;">FF POS پلے اسٹور پر لائیو ہونے والی ہے۔ پلے اسٹور پر اپنی رائے ضرور دیں</div>
+    <div style="background:#fff;border:2px solid #a5d6a7;border-radius:16px;padding:4px 12px 8px;margin:10px 0;text-align:right;font-size:16px;line-height:2.05;">
+      <div>1️⃣ پلے اسٹور کھولیں، اوپر اپنی تصویر دبائیں</div>
+      <div>2️⃣ <b style="font-family:Arial,sans-serif;font-size:13px;color:#0d47a1;direction:ltr;unicode-bidi:isolate">Manage apps &amp; device</b> ← <b style="font-family:Arial,sans-serif;font-size:13px;color:#0d47a1">Manage</b></div>
+      <div>3️⃣ فہرست میں FF POS دبائیں</div>
+      <div>4️⃣ نیچے <b style="font-family:Arial,sans-serif;font-size:13px;color:#0d47a1;direction:ltr;unicode-bidi:isolate">Send private feedback</b> دبائیں</div>
+      <div>5️⃣ اپنی رائے اور مشورہ لکھیں، ستارے ⭐ دیں</div>
+    </div>
+    <div style="font-size:14px;color:#b71c1c;line-height:1.9;">⚠️ ٹیسٹنگ نہ چھوڑیں — روز 2 سے 3 منٹ ایپ کھلی رہنے دیں</div>
+    <button type="button" onclick="_fbNudgeClose()" style="width:100%;margin-top:8px;padding:6px 10px 12px;border:none;border-radius:14px;background:linear-gradient(135deg,#43a047,#1b5e20);color:#fff;font-family:inherit;font-size:20px;box-shadow:0 4px 0 #0f3d12;cursor:pointer;">ٹھیک ہے، ابھی دیتا ہوں</button>
+  </div>
+</div>
+<script>
+// صرف ٹیسٹنگ کے دور میں (FF_OPEN_FOR_TESTING)، دن میں ایک بار، ایپ کھلنے کے چند سیکنڈ بعد
+// اگر کوئی اور اسکرین (گیٹ، بل، اپڈیٹ پاپ اپ) کھلی ہو تو تھوڑی دیر بعد دوبارہ کوشش
+(function(){
+  const KEY = 'ff_fb_nudge_day';
+  const today = () => new Date().toISOString().slice(0,10);
+  function busy(){
+    const g = document.getElementById('ffGate'); if(g && g.classList.contains('show')) return true;
+    const bp = document.getElementById('billPreviewModal'); if(bp && bp.classList.contains('open')) return true;
+    const up = document.getElementById('aupdDone'); if(up && up.offsetParent !== null) return true;
+    return false;
+  }
+  let tries = 0;
+  function tryShow(){
+    try{
+      if(typeof FF_OPEN_FOR_TESTING === 'undefined' || !FF_OPEN_FOR_TESTING) return;
+      if(localStorage.getItem(KEY) === today()) return;
+    }catch(e){ return; }
+    if(busy()){ if(++tries < 12) setTimeout(tryShow, 5000); return; }
+    document.getElementById('fbNudge').style.display = 'flex';
+  }
+  window._fbNudgeClose = function(){
+    try{ localStorage.setItem(KEY, today()); }catch(e){}
+    document.getElementById('fbNudge').style.display = 'none';
+  };
+  window.addEventListener('load', () => setTimeout(tryShow, 6000));
 })();
 </script>
 </body>
