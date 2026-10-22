@@ -27,17 +27,19 @@ b{font-family:Arial,sans-serif;direction:ltr;unicode-bidi:isolate}
 <div class="w">
   <img src="icon-512.png" alt="FF POS">
   <h1>FF POS — اپنی رائے دیں</h1>
-  <a class="btn" id="go" href="https://play.google.com/apps/testing/com.pbtcodelabs.ffpos">▶️ پلے اسٹور پر FF POS کھولیں</a>
+  <a class="btn" id="go" href="https://play.google.com/store/apps/details?id=com.pbtcodelabs.ffpos">1️⃣ پلے اسٹور میں FF POS کھولیں</a>
   <ol>
-    <li>صفحہ کھلے تو <b>download it on Google Play</b> دبائیں</li>
-    <li>پلے اسٹور میں FF POS کھلے گی — تھوڑا نیچے سکرول کریں</li>
+    <li>FF POS کا پلے اسٹور صفحہ کھلے گا — تھوڑا نیچے سکرول کریں</li>
     <li><b>Send private feedback</b> دبا کر تجاویز اور تاثرات لکھیں</li>
     <li>ستارے ⭐ نظر آئیں تو اچھی ریٹنگ دیں</li>
   </ol>
+  <a class="btn" style="background:linear-gradient(135deg,#ff8f00,#e65100);box-shadow:0 5px 0 #a33a00;font-size:20px" href="https://play.google.com/apps/testing/com.pbtcodelabs.ffpos">2️⃣ اوپر والا نہ کھلے تو ٹیسٹر والا صفحہ کھولیں</a>
 </div>
 <script>
-// سیدھا ٹیسٹر والا صفحہ کھولیں (یہ ہر ٹیسٹر کے لیے کھلتا ہے)؛ نہ کھلے تو اوپر والا بٹن موجود ہے
-setTimeout(function(){ location.href = 'https://play.google.com/apps/testing/com.pbtcodelabs.ffpos'; }, 400);
+// اینڈرائیڈ پر سیدھا پلے اسٹور ایپ میں FF POS کا صفحہ (ٹیسٹر صفحے کے «download it on Google Play» والی جگہ)
+if(/Android/i.test(navigator.userAgent)){
+  setTimeout(function(){ location.href = 'intent://details?id=com.pbtcodelabs.ffpos#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' + encodeURIComponent('https://play.google.com/store/apps/details?id=com.pbtcodelabs.ffpos') + ';end'; }, 400);
+}
 </script>
 </body>
 </html>
