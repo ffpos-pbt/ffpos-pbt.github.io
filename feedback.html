@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ffpos-pbt.github.io/feedback.html">
 <meta property="og:title" content="FF POS — پلے اسٹور پر اپنی رائے اور ریٹنگ دیں ⭐">
-<meta property="og:description" content="لنک دبائیں ← پلے اسٹور پر FF POS کھلے گی ← نیچے Send private feedback میں رائے لکھیں">
+<meta property="og:description" content="لنک دبائیں ← FF POS کا پلے اسٹور صفحہ کھلے گا ← Send private feedback میں رائے لکھیں">
 <meta property="og:image" content="https://ffpos-pbt.github.io/icon-512.png">
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
@@ -27,19 +27,17 @@ b{font-family:Arial,sans-serif;direction:ltr;unicode-bidi:isolate}
 <div class="w">
   <img src="icon-512.png" alt="FF POS">
   <h1>FF POS — اپنی رائے دیں</h1>
-  <a class="btn" id="go" href="https://play.google.com/store/apps/details?id=com.pbtcodelabs.ffpos">▶️ پلے اسٹور پر FF POS کھولیں</a>
+  <a class="btn" id="go" href="https://play.google.com/apps/testing/com.pbtcodelabs.ffpos">▶️ پلے اسٹور پر FF POS کھولیں</a>
   <ol>
-    <li>پلے اسٹور میں FF POS کا صفحہ کھلے گا</li>
-    <li>تھوڑا نیچے سکرول کریں</li>
+    <li>صفحہ کھلے تو <b>download it on Google Play</b> دبائیں</li>
+    <li>پلے اسٹور میں FF POS کھلے گی — تھوڑا نیچے سکرول کریں</li>
     <li><b>Send private feedback</b> دبا کر تجاویز اور تاثرات لکھیں</li>
     <li>ستارے ⭐ نظر آئیں تو اچھی ریٹنگ دیں</li>
   </ol>
 </div>
 <script>
-// اینڈرائیڈ پر سیدھا پلے اسٹور ایپ میں FF POS کا صفحہ کھولیں؛ نہ کھلے تو اوپر والا بٹن موجود ہے
-if(/Android/i.test(navigator.userAgent)){
-  setTimeout(function(){ location.href = 'intent://details?id=com.pbtcodelabs.ffpos#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' + encodeURIComponent('https://play.google.com/store/apps/details?id=com.pbtcodelabs.ffpos') + ';end'; }, 400);
-}
+// سیدھا ٹیسٹر والا صفحہ کھولیں (یہ ہر ٹیسٹر کے لیے کھلتا ہے)؛ نہ کھلے تو اوپر والا بٹن موجود ہے
+setTimeout(function(){ location.href = 'https://play.google.com/apps/testing/com.pbtcodelabs.ffpos'; }, 400);
 </script>
 </body>
 </html>
