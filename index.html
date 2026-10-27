@@ -1434,7 +1434,7 @@
 
 <!-- ===== FF910FR010: 🛠️ DEVELOPER CONSOLE — گیٹ پر ورژن نمبر پر 7 ٹیپ سے کھلتا ہے، صرف ڈویلپر کے لیے ===== -->
 <div id="devConsoleModal" onclick="if(event.target===this) closeDevConsole()" style="display:none;position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px;">
-  <div style="background:#fff;color:#0f172a;border-radius:16px;padding:18px;width:100%;max-width:330px;box-shadow:0 10px 30px rgba(0,0,0,.4);font-family:Arial,sans-serif;direction:ltr;">
+  <div style="background:#fff;color:#0f172a;border-radius:16px;padding:18px;width:100%;max-width:420px;max-height:88vh;overflow-y:auto;box-sizing:border-box;box-shadow:0 10px 30px rgba(0,0,0,.4);font-family:Arial,sans-serif;direction:ltr;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
       <div style="font-size:18px;font-weight:900;">🛠️ Developer Console</div>
       <span onclick="closeDevConsole()" style="cursor:pointer;font-size:18px;font-weight:900;">✖</span>
@@ -1445,10 +1445,46 @@
       <div id="devConsoleErr" style="display:none;color:#dc2626;font-size:12px;font-weight:700;text-align:center;margin-bottom:8px;">❌ Wrong password</div>
       <button type="button" id="devConsoleBtn" onclick="submitDevConsolePass()" style="width:100%;padding:11px;border:none;border-radius:10px;background:#1b5e20;color:#fff;font-weight:800;font-size:14px;cursor:pointer;">Unlock</button>
     </div>
+    <!-- FF2710TU023: پاس ورڈ کے بعد کیپسول بٹن — جو دبائیں صرف وہی حصہ کھلے -->
     <div id="devConsoleOpen" style="display:none;">
-      <div style="background:#dcfce7;color:#166534;border-radius:10px;padding:10px;font-weight:800;font-size:13px;text-align:center;margin-bottom:10px;">✅ Developer Unlock is active on this phone<br><span style="font-weight:600;font-size:11.5px;">The app will never expire here.</span></div>
-      <button type="button" onclick="disableDeveloperUnlock()" style="width:100%;padding:10px;border:1.5px solid #fca5a5;border-radius:10px;background:#fff;color:#b91c1c;font-weight:800;font-size:13px;cursor:pointer;">Turn off Developer Unlock</button>
+      <div class="devTabs" role="tablist">
+        <button type="button" class="devTab" data-sec="unlock" role="tab" onclick="showDevSec('unlock')"><b>🔓 Developer Unlock</b><small>Permanently unlock this app on this phone</small></button>
+        <button type="button" class="devTab" data-sec="pass" role="tab" onclick="showDevSec('pass')"><b>🔑 Change Password</b><small>New Developer Console password</small></button>
+        <button type="button" class="devTab" data-sec="device" role="tab" onclick="showDevSec('device')"><b>📱 This Device</b><small>Play plan, trial &amp; subscription status</small></button>
+      </div>
+      <div class="devSec" data-sec="unlock"><div id="devUnlockState"></div></div>
+      <div class="devSec" data-sec="pass" style="display:none;">
+        <div style="font-size:12px;color:#64748b;margin:0 0 8px;">The new password works on this phone from now on (the old one stops working here).</div>
+        <input type="password" id="devConsoleNewPass" class="devInput" autocomplete="new-password" placeholder="New developer password (min 6)">
+        <input type="password" id="devConsoleNewPass2" class="devInput" autocomplete="new-password" placeholder="Type the new password again" onkeydown="if(event.key==='Enter') saveDevConsolePassword()">
+        <button type="button" class="devBigBtn go" onclick="saveDevConsolePassword()">💾 Save Password</button>
+        <div id="devConsolePassMsg" class="devSecHint"></div>
+      </div>
+      <div class="devSec" data-sec="device" style="display:none;"><div id="devDeviceInfo"></div></div>
     </div>
+<style>
+/* FF2710TU023: ڈویلپر کنسول کے کیپسول بٹن */
+.devTabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:2px 0 12px}
+.devTab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:60px;padding:8px 10px;border:1.5px solid #dbe1ea;border-radius:22px;background:linear-gradient(180deg,#fff,#eef2f7);box-shadow:0 2px 0 #cbd5e1,0 4px 10px rgba(15,23,42,.08);color:#0f172a;cursor:pointer;text-align:center;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.devTab b{font-size:13px;font-weight:800;line-height:1.2}
+.devTab small{font-size:10.5px;font-weight:600;color:#64748b;line-height:1.25}
+.devTab.active{background:linear-gradient(180deg,#2e7d32,#1b5e20);border-color:#1b5e20;color:#fff;box-shadow:0 2px 0 #14532d,0 6px 14px rgba(27,94,32,.35)}
+.devTab.active small{color:#dcfce7}
+.devTab:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.devTabs .devTab:last-child:nth-child(odd){grid-column:1/-1}
+.devStateBox{border-radius:14px;padding:12px;font-weight:800;font-size:13.5px;text-align:center;margin-bottom:10px}
+.devStateBox.on{background:#dcfce7;color:#166534;border:1.5px solid #86efac}
+.devStateBox.off{background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0}
+.devStateBox small{display:block;font-weight:600;font-size:11.5px;margin-top:4px}
+.devBigBtn{width:100%;padding:13px;border:none;border-radius:999px;font-weight:900;font-size:14px;cursor:pointer;font-family:inherit;margin-top:4px}
+.devBigBtn.go{background:linear-gradient(180deg,#22c55e,#15803d);color:#fff;box-shadow:0 3px 0 #166534}
+.devBigBtn.stop{background:#fff;color:#b91c1c;border:1.5px solid #fca5a5}
+.devInput{width:100%;box-sizing:border-box;padding:11px;margin-bottom:8px;border:1.5px solid #dbe1ea;border-radius:12px;font-size:14px}
+.devInfoRow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #eef2f7;margin-bottom:6px;font-size:12.5px}
+.devInfoRow span{color:#64748b;font-weight:700;white-space:nowrap}
+.devInfoRow b{color:#0f172a;text-align:right;word-break:break-all}
+.devSecHint{font-size:11.5px;color:#64748b;margin-top:8px;text-align:center}
+</style>
   </div>
 </div>
 
@@ -3318,13 +3354,69 @@ function devConsoleBadgeTap(){
   if(_devTapCount >= 7){ _devTapCount = 0; openDevConsole(); }
 }
 function openDevConsole(){
-  const unlocked = isDeveloperUnlocked();
-  document.getElementById('devConsoleLocked').style.display = unlocked ? 'none' : 'block';
-  document.getElementById('devConsoleOpen').style.display = unlocked ? 'block' : 'none';
+  // FF2710TU023: ہر بار پاس ورڈ — پھر کیپسول بٹنوں والا پینل
+  document.getElementById('devConsoleLocked').style.display = 'block';
+  document.getElementById('devConsoleOpen').style.display = 'none';
   document.getElementById('devConsoleErr').style.display = 'none';
   const inp = document.getElementById('devConsolePass'); inp.value = '';
   document.getElementById('devConsoleModal').style.display = 'flex';
-  if(!unlocked) setTimeout(()=>inp.focus(), 150);
+  setTimeout(()=>inp.focus(), 150);
+}
+function showDevSec(name){
+  const root = document.getElementById('devConsoleOpen'); if(!root) return;
+  root.querySelectorAll('.devTab').forEach(b => { const on = b.dataset.sec === name; b.classList.toggle('active', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
+  root.querySelectorAll('.devSec').forEach(sec => { sec.style.display = sec.dataset.sec === name ? 'block' : 'none'; });
+  if(name === 'unlock') renderDevUnlockSec();
+  if(name === 'device') renderDevDeviceSec();
+}
+function renderDevUnlockSec(){
+  const el = document.getElementById('devUnlockState'); if(!el) return;
+  const on = isDeveloperUnlocked();
+  el.innerHTML = (on
+    ? '<div class="devStateBox on">✅ Permanently unlocked on this phone<small>The app never expires here — trial, subscription and expiry don\'t apply to this phone.</small></div><button type="button" class="devBigBtn stop" onclick="disableDeveloperUnlock()">Turn off permanent unlock</button>'
+    : '<div class="devStateBox off">🔒 Not unlocked<small>This phone follows the normal trial / Google Play subscription, like every customer.</small></div><button type="button" class="devBigBtn go" onclick="enableDeveloperUnlock()">🔓 Permanently unlock this app</button>') +
+    '<div class="devSecHint">Only this phone is unlocked — no customer ever gets it.</div>';
+}
+function enableDeveloperUnlock(){
+  try{ localStorage.setItem('ff_dev_unlock', '1'); }catch(e){}
+  try{ closeGate(); }catch(e){}
+  try{ unlockApp(); }catch(e){}
+  try{ showSubStatusBar(); updateSettingsSubInfo(); }catch(e){}
+  renderDevUnlockSec();
+  try{ showToast('✅ This app is now permanently unlocked on this phone'); }catch(e){}
+}
+function renderDevDeviceSec(){
+  const el = document.getElementById('devDeviceInfo'); if(!el) return;
+  let st = {}; try{ st = getSubStatus() || {}; }catch(e){}
+  const esc = v => String(v == null || v === '' ? '—' : v).replace(/</g,'&lt;');
+  let ft = ''; try{ const t = _ftStart(); ft = t ? _isoDay(t) : ''; }catch(e){}
+  const rows = [
+    ['App version', typeof FF_APP_VERSION !== 'undefined' ? FF_APP_VERSION : ''],
+    ['Permanent unlock', isDeveloperUnlocked() ? '✅ ON' : 'OFF'],
+    ['Subscription', st.active ? '🟢 Active' : '🔴 Expired / none'],
+    ['Plan', st.dev ? '🛠️ Developer (permanent)' : (st.paid ? ('Google Play' + (localStorage.getItem('ff_play_plan') ? ' — ' + localStorage.getItem('ff_play_plan') : '')) : (st.trial ? 'Free trial' : '—'))],
+    ['Free trial started', ft],
+  ];
+  el.innerHTML = rows.map(r => '<div class="devInfoRow"><span>' + r[0] + '</span><b>' + esc(r[1]) + '</b></div>').join('');
+}
+async function devPassHash(pass){
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:enc.encode(DEV_UNLOCK_SALT), iterations:200000}, key, 256);
+  return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function saveDevConsolePassword(){
+  const a = document.getElementById('devConsoleNewPass'), b = document.getElementById('devConsoleNewPass2'), msg = document.getElementById('devConsolePassMsg');
+  const p1 = a.value.trim(), p2 = b.value.trim();
+  msg.style.color = '#dc2626';
+  if(p1.length < 6){ msg.textContent = '⚠️ At least 6 letters/digits'; return; }
+  if(p1 !== p2){ msg.textContent = '⚠️ Both passwords must match'; return; }
+  msg.style.color = '#64748b'; msg.textContent = '⏳ Saving…';
+  try{
+    localStorage.setItem('ff_dev_pass_hash', await devPassHash(p1));
+    a.value = ''; b.value = '';
+    msg.style.color = '#15803d'; msg.textContent = '✅ Password changed on this phone';
+  }catch(e){ msg.style.color = '#dc2626'; msg.textContent = '❌ Could not save — ' + e.message; }
 }
 function closeDevConsole(){ document.getElementById('devConsoleModal').style.display = 'none'; }
 async function devPassMatches(pass){
@@ -3333,7 +3425,7 @@ async function devPassMatches(pass){
     const enc = new TextEncoder();
     const key = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveBits']);
     const bits = await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:enc.encode(DEV_UNLOCK_SALT), iterations:200000}, key, 256);
-    return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,'0')).join('') === DEV_UNLOCK_HASH;
+    return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,'0')).join('') === (localStorage.getItem('ff_dev_pass_hash') || DEV_UNLOCK_HASH);
   }catch(e){ return false; }
 }
 async function submitDevConsolePass(){
@@ -3344,12 +3436,11 @@ async function submitDevConsolePass(){
   const ok = await devPassMatches(pass);
   btn.disabled = false; btn.textContent = 'Unlock';
   if(!ok){ document.getElementById('devConsoleErr').style.display = 'block'; return; }
-  try{ localStorage.setItem('ff_dev_unlock', '1'); }catch(e){}
-  closeDevConsole();
-  try{ closeGate(); }catch(e){}
-  try{ unlockApp(); }catch(e){}
-  try{ showSubStatusBar(); updateSettingsSubInfo(); }catch(e){}
-  alert('✅ Developer Unlock is now active on this phone.');
+  // FF2710TU023: صحیح پاس ورڈ — سیدھا ان لاک نہیں، پینل کھلے؛ سب سے پہلے Developer Unlock
+  document.getElementById('devConsolePass').value = '';
+  document.getElementById('devConsoleLocked').style.display = 'none';
+  document.getElementById('devConsoleOpen').style.display = 'block';
+  showDevSec('unlock');
 }
 function disableDeveloperUnlock(){
   if(!confirm('Turn off Developer Unlock on this phone?')) return;
@@ -3391,9 +3482,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF2610MO022';
+const FF_APP_VERSION = 'FF2710TU023';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Removed the daily Play Store feedback reminder';
+const FF_UPDATE_NOTE = 'Developer console: capsule buttons — Developer Unlock first, each option opens on its own';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9751,7 +9842,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF2610MO022';
+const APP_VERSION = 'FF2710TU023';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
