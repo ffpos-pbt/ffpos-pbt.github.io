@@ -1445,7 +1445,7 @@
       <div id="devConsoleErr" style="display:none;color:#dc2626;font-size:12px;font-weight:700;text-align:center;margin-bottom:8px;">❌ Wrong password</div>
       <button type="button" id="devConsoleBtn" onclick="submitDevConsolePass()" style="width:100%;padding:11px;border:none;border-radius:10px;background:#1b5e20;color:#fff;font-weight:800;font-size:14px;cursor:pointer;">Unlock</button>
     </div>
-    <!-- FF2710TU025: پاس ورڈ کے بعد کیپسول بٹن — جو دبائیں صرف وہی حصہ کھلے -->
+    <!-- FF2710TU026: پاس ورڈ کے بعد کیپسول بٹن — جو دبائیں صرف وہی حصہ کھلے -->
     <div id="devConsoleOpen" style="display:none;">
       <div class="devTabs" role="tablist">
         <button type="button" class="devTab" data-sec="unlock" role="tab" onclick="showDevSec('unlock')"><b>🔓 Developer Unlock</b><small>Permanently unlock this app on this phone</small></button>
@@ -1463,7 +1463,7 @@
       <div class="devSec" data-sec="device" style="display:none;"><div id="devDeviceInfo"></div></div>
     </div>
 <style>
-/* FF2710TU025: ڈویلپر کنسول کے کیپسول بٹن */
+/* FF2710TU026: ڈویلپر کنسول کے کیپسول بٹن */
 .devTabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:2px 0 12px}
 .devTab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:60px;padding:8px 10px;border:1.5px solid #dbe1ea;border-radius:22px;background:linear-gradient(180deg,#fff,#eef2f7);box-shadow:0 2px 0 #cbd5e1,0 4px 10px rgba(15,23,42,.08);color:#0f172a;cursor:pointer;text-align:center;font-family:inherit;-webkit-tap-highlight-color:transparent}
 .devTab b{font-size:13px;font-weight:800;line-height:1.2}
@@ -3354,7 +3354,7 @@ function devConsoleBadgeTap(){
   if(_devTapCount >= 7){ _devTapCount = 0; openDevConsole(); }
 }
 function openDevConsole(){
-  // FF2710TU025: ہر بار پاس ورڈ — پھر کیپسول بٹنوں والا پینل
+  // FF2710TU026: ہر بار پاس ورڈ — پھر کیپسول بٹنوں والا پینل
   document.getElementById('devConsoleLocked').style.display = 'block';
   document.getElementById('devConsoleOpen').style.display = 'none';
   document.getElementById('devConsoleErr').style.display = 'none';
@@ -3436,7 +3436,7 @@ async function submitDevConsolePass(){
   const ok = await devPassMatches(pass);
   btn.disabled = false; btn.textContent = 'Unlock';
   if(!ok){ document.getElementById('devConsoleErr').style.display = 'block'; return; }
-  // FF2710TU025: صحیح پاس ورڈ — سیدھا ان لاک نہیں، پینل کھلے؛ سب سے پہلے Developer Unlock
+  // FF2710TU026: صحیح پاس ورڈ — سیدھا ان لاک نہیں، پینل کھلے؛ سب سے پہلے Developer Unlock
   document.getElementById('devConsolePass').value = '';
   document.getElementById('devConsoleLocked').style.display = 'none';
   document.getElementById('devConsoleOpen').style.display = 'block';
@@ -3482,9 +3482,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF2710TU025';
+const FF_APP_VERSION = 'FF2710TU026';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Eye button on every PIN and password box — tap to show, tap again to hide';
+const FF_UPDATE_NOTE = 'Password eye button: full-width boxes no longer shrink';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9842,7 +9842,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF2710TU025';
+const APP_VERSION = 'FF2710TU026';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10287,7 +10287,7 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-/* 👁️ (ہر PIN/پاس ورڈ خانہ) FF2710TU025: پاس ورڈ کے خانوں میں آنکھ کا بٹن — ایک بار دبائیں تو پاس ورڈ صاف نظر آئے، دوبارہ دبائیں تو چھپ جائے؛
+/* 👁️ (ہر PIN/پاس ورڈ خانہ) FF2710TU026: پاس ورڈ کے خانوں میں آنکھ کا بٹن — ایک بار دبائیں تو پاس ورڈ صاف نظر آئے، دوبارہ دبائیں تو چھپ جائے؛
    جب تک خود نہ دبائیں، ویسا ہی رہتا ہے (دبائے رکھنے کی ضرورت نہیں) */
 (function(){
   var SVG = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
@@ -10301,7 +10301,7 @@ if ('serviceWorker' in navigator) {
     wrap.style.cssText = 'position:relative; display:block; margin:' + cs.marginTop + ' ' + cs.marginRight + ' ' + cs.marginBottom + ' ' + cs.marginLeft + ';';
     var pd = inp.parentElement ? getComputedStyle(inp.parentElement).display : '';
     if(/flex|grid/.test(pd)){ wrap.style.flex = cs.flexGrow + ' ' + cs.flexShrink + ' ' + cs.flexBasis; wrap.style.minWidth = '0'; wrap.style.alignSelf = cs.alignSelf; }
-    else if(/inline/.test(cs.display) && !/100%/.test(inp.style.width || '')){ wrap.style.display = 'inline-block'; wrap.style.verticalAlign = 'middle'; }
+    else if(/inline/.test(cs.display) && (/px/.test(inp.style.width || '') || (inp.offsetWidth > 0 && inp.parentElement && inp.offsetWidth < inp.parentElement.clientWidth * 0.9))){ wrap.style.display = 'inline-block'; wrap.style.verticalAlign = 'middle'; }
     inp.parentNode.insertBefore(wrap, inp); wrap.appendChild(inp);
     inp.style.margin = '0'; inp.style.boxSizing = 'border-box';
     var rtl = cs.direction === 'rtl';
