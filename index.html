@@ -3585,9 +3585,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF2810WE027';
+const FF_APP_VERSION = 'FF0211MO028';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Share app: picture goes with every button (WhatsApp, Facebook, Telegram…)';
+const FF_UPDATE_NOTE = 'New SOS button on the side: send a problem or suggestion with screenshot & voice to PBT Help Desk, reply comes inside the app';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9926,7 +9926,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF2810WE027';
+const APP_VERSION = 'FF0211MO028';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10431,5 +10431,6 @@ if ('serviceWorker' in navigator) {
   try{ new MutationObserver(function(){ if(!queued){ queued = true; requestAnimationFrame(scan); } }).observe(document.documentElement, {childList:true, subtree:true}); }catch(e){}
 })();
 </script>
+<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0211MO028" data-float="1" defer></script> <!-- 🆘 FF0211MO028: PBT Help Desk -->
 </body>
 </html>
