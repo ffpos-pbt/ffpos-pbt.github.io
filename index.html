@@ -2095,6 +2095,7 @@
           <span id="netStatusText" style="font-size:11px;font-weight:900;color:#fff;letter-spacing:.5px;">ONLINE</span>
         </div>
         <span id="appVersionLabel" onclick="devConsoleBadgeTap()" style="user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:default;font-size:10.5px;font-weight:900;color:#ffd54f;letter-spacing:.5px;text-shadow:0 1px 2px rgba(0,0,0,0.5);"></span>
+        <button type="button" onclick="openHelpDesk()" title="PBT Help Desk" style="border:0;background:none;padding:0;cursor:pointer;display:flex;align-items:center">🆘</button>
         <button type="button" onclick="shareAppPoster()" title="ایپ شیئر کریں" style="
           width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.6);
           background:linear-gradient(145deg,#ffe082,#ffa000);color:#3a2600;cursor:pointer;padding:0;
@@ -3585,9 +3586,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF0211MO028';
+const FF_APP_VERSION = 'FF0211MO029';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'New SOS button on the side: send a problem or suggestion with screenshot & voice to PBT Help Desk, reply comes inside the app';
+const FF_UPDATE_NOTE = 'SOS button moved into the top bar';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9926,7 +9927,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF0211MO028';
+const APP_VERSION = 'FF0211MO029';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10431,6 +10432,6 @@ if ('serviceWorker' in navigator) {
   try{ new MutationObserver(function(){ if(!queued){ queued = true; requestAnimationFrame(scan); } }).observe(document.documentElement, {childList:true, subtree:true}); }catch(e){}
 })();
 </script>
-<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0211MO028" data-float="1" defer></script> <!-- 🆘 FF0211MO028: PBT Help Desk -->
+<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0211MO029" defer></script> <!-- 🆘 FF0211MO029: PBT Help Desk -->
 </body>
 </html>
