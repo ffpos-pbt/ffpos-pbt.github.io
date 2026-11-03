@@ -5,3 +5,4 @@
 - کام مکمل کر کے خود commit، push، PR بنا کر `main` میں merge کریں؛ جواب مختصر، اسکرین شاٹ کے ساتھ۔
 - **🆘 PBT Help Desk (FF0211MO028):** `index.html` کے آخر میں `https://pbtcodelabs-pbt.github.io/help/widget.js` (`data-float="1"`) — بائیں کنارے پر گول سرخ «SOS / Help» پٹی (انگلی سے اوپر نیچے سرکتی ہے)، ایپ کے اندر پاپ اپ میں مسئلہ / مشورہ۔ ورژن بدلیں تو `data-ver` بھی۔
 - **FF0211MO029:** SOS (PBT Help Desk) اب ایپ کی اپنی اوپر/نیچے کی پٹی میں (`onclick="openHelpDesk()"` + 🆘، `widget.js` گول SOS بناتا ہے)؛ کنارے والی پٹی ختم (مالک: صفحے کے بیچ میں نہیں)۔
+- **FF0311TU030 (ہیلپ ڈیسک #31، مالک کا حکم — پلے اسٹور ایپ):** اوپر والے 💬 «مسئلہ بتائیں» کے کھلنے والے بٹن: واٹس ایپ اور SMS ہٹا کر 🆘 Help Desk (`openHelpDesk`) + Gmail؛ «CONTACT FOR PURCHASE»، گیٹ کا «💬 مدد» (خریداری / کوڈ) اور برانڈ نمبر ویسے ہی۔
