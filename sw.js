@@ -32,6 +32,8 @@ self.addEventListener('activate', (event) => {
 // Network-first — تازہ ترین ورژن ملے تو وہی دکھائیں (auto-update کے لیے ضروری)،
 // آف لائن ہونے پر cache سے دکھائیں
 self.addEventListener('fetch', (event) => {
+  /* ہیلپ ڈیسک (#33): pbtcodelabs-pbt.github.io/help/ کی فائلیں (widget.js) کبھی کیش نہیں — ہر ایپ میں نیا بٹن فوراً */
+  try { const _hd = new URL(event.request.url); if (_hd.hostname === 'pbtcodelabs-pbt.github.io' && _hd.pathname.startsWith('/help/')) return; } catch (_e) {}
   if (event.request.method !== 'GET') return;
   event.respondWith(
     fetch(event.request, { cache: 'no-store' })
