@@ -2129,7 +2129,7 @@
       display:none; flex-direction:row; align-items:center; gap:8px;
       animation:devChatPop .15s ease;
     ">
-      <!-- FF0511TH031 (ہیلپ ڈیسک #31، مالک کا حکم): عام مدد = Help Desk + Gmail؛ واٹس ایپ / SMS صرف خریداری (کوڈ) والے حصوں میں -->
+      <!-- FF0511TH032 (ہیلپ ڈیسک #31، مالک کا حکم): عام مدد = Help Desk + Gmail؛ واٹس ایپ / SMS صرف خریداری (کوڈ) والے حصوں میں -->
       <button type="button" onclick="document.getElementById('devChatOptions').style.display='none'; openHelpDesk();" title="Help Desk — Report problems &amp; issues" style="background:none;border:0;padding:0;cursor:pointer;flex-shrink:0;"><span class="pbthd-sos" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(#fde047,#facc15);color:#111;border-radius:999px;padding:2px 9px;font:800 12px/1.35 Arial,sans-serif;box-shadow:0 2px 0 #ca8a04;white-space:nowrap;vertical-align:middle;direction:ltr"><b style="background:#111;color:#facc15;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:11px">?</b>Help Desk</span></button>
 
       <!-- Gmail — اصلی 4 رنگ لوگو، سفید بیک گراؤنڈ پر -->
@@ -3561,9 +3561,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF0511TH031';
+const FF_APP_VERSION = 'FF0511TH032';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Help Desk button is yellow everywhere — no SOS mark';
+const FF_UPDATE_NOTE = 'Bills and reports now show your own shop name and phone — no developer ad';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -6114,13 +6114,7 @@ function buildBillHtml(sale){
         <div style="font-family:${_billFont};font-weight:900;font-size:${F(22)}px;color:${bt.shopText};letter-spacing:.5px;text-shadow:${bt.shopBg.includes('gradient')?'0 1px 4px rgba(0,0,0,0.3)':'none'};">&#127828; ${cfg.shopName}</div>
         ${subHtml?`<div style="display:flex;justify-content:center;margin-top:5px;">${subHtml}</div>`:''}
         ${phoneHtml?`<div style="display:flex;justify-content:center;margin-top:4px;">${phoneHtml}</div>`:''}
-        <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:5px;flex-wrap:wrap;">
-          <span style="position:relative;width:12px;height:12px;border-radius:4px;background:#25D366;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <span style="font-size:7px;">📞</span>
-            <span style="position:absolute;right:-2px;bottom:-2px;width:7px;height:7px;border-radius:50%;background:#fff;color:#128C7E;font-size:5px;font-weight:900;line-height:7px;text-align:center;">B</span>
-          </span>
-          <span style="font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;font-size:${F(8.5)}px;color:${bt.shopText};opacity:.85;">Build Your Business Android App Today &nbsp;03206793793</span>
-        </div>
+        <!-- مالک کا حکم (5 نومبر): «Build Your Business Android App Today 0320…» ڈویلپر کا اشتہار ہٹایا — بل پر صرف دکان کا اپنا نام / نمبر -->
       </div>
       <div style="background:${bt.metaBg};border-radius:7px;padding:${RP(5)}px 10px;margin-bottom:6px;text-align:center;">
         <div style="font-family:${_billFont};font-size:${F(10)}px;font-weight:900;color:${bt.metaText};">${invLabel} ${sale.invNo} &nbsp;|&nbsp; ${tableName}</div>
@@ -6740,8 +6734,8 @@ function _buildBillCanvas(sale, forPrint, lightMode, printWidthPx){
     // ===== "Build Your Business Android App Today" برانڈنگ لائن — ہیڈر میں محفوظ جگہ =====
     // (پہلے یہ نیچے فوٹر کے آخر میں تھی جہاں کبھی کبھار کینوس کے کنارے پر کٹ جاتی تھی —
     // اب ہیڈر کے اندر مخصوص جگہ پر رکھی ہے جو ہمیشہ محفوظ اور مکمل نظر آئے گی)
-    {
-      const waText = 'Build Your Business Android App Today   03206793793';
+    if(false){   // مالک کا حکم (5 نومبر): ڈویلپر کا اشتہار / نمبر بل پر نہیں
+      const waText = '';
       const maxW = iW - S(10);
       let waFont = S(11);
       ctx.font = `700 ${waFont}px Arial, sans-serif`;
@@ -7676,8 +7670,8 @@ function encodeEscPos(sale){
     addText(_center(line.slice(0,W),W)); newLine();
   });
   newLine();
-  addText(_center('Build Your Business Android App Today',W)); newLine();
-  addText(_center('03206793793',W)); newLine();
+  if(cfg.shopName){ addText(_center(String(cfg.shopName).slice(0,W),W)); newLine(); }   // نیچے دکان کا اپنا نام / نمبر (ڈویلپر کا نہیں)
+  if(cfg.phone){ addText(_center(String(cfg.phone).slice(0,W),W)); newLine(); }
 
   newLine(4);
   addBytes(CMD_CUT);
@@ -8650,21 +8644,13 @@ async function buildAppPosterCanvas(){
   ctx.fillStyle = 'rgba(0,0,0,.35)'; _pRound(ctx, W/2-lw/2, ly2, lw, 52, 26); ctx.fill();
   ctx.fillStyle = '#f4d58d'; ctx.fillText(P.link, W/2, ly2+35);
 
-  // ڈویلپر
+  // ڈویلپر کا نام / ذاتی نمبر نہیں (مالک کا حکم، 5 نومبر) — صرف Google Play پر تلاش
   const fy = ly2 + 85;
-  const fg = ctx.createLinearGradient(0,fy,0,fy+180); fg.addColorStop(0,'#f7dd9c'); fg.addColorStop(1,'#c99a34');
+  const fg = ctx.createLinearGradient(0,fy,0,fy+120); fg.addColorStop(0,'#f7dd9c'); fg.addColorStop(1,'#c99a34');
   ctx.save(); ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=16; ctx.shadowOffsetY=6;
-  ctx.fillStyle = fg; _pRound(ctx,70,fy,W-140,215,30); ctx.fill(); ctx.restore();
+  ctx.fillStyle = fg; _pRound(ctx,70,fy,W-140,120,30); ctx.fill(); ctx.restore();
   ctx.direction='rtl'; ctx.fillStyle = '#3a2600'; ctx.font = `700 36px ${FF}`;
-  ctx.fillText('ڈویلپر: ' + P.dev + '  —  رابطہ / مدد', W/2, fy+58);
-  ctx.direction='ltr'; ctx.font = '800 38px Arial, sans-serif';
-  const nw = ctx.measureText(P.phone).width, pw2 = nw + 120, pX = W/2-pw2/2, pY = fy+82, pH = 66;
-  const pg = ctx.createLinearGradient(0,pY,0,pY+pH); pg.addColorStop(0,'#2fd66b'); pg.addColorStop(1,'#1aa851');
-  ctx.fillStyle = pg; _pRound(ctx,pX,pY,pw2,pH,pH/2); ctx.fill();
-  _pWaIcon(ctx, pX+42, pY+pH/2, 22);
-  ctx.fillStyle = '#fff'; ctx.fillText(P.phone, pX+pw2/2+26, pY+47);
-  ctx.fillStyle = '#3a2600'; ctx.font = '600 26px Arial, sans-serif';
-  ctx.fillText(P.email, W/2, pY+pH+42);
+  ctx.fillText('🔍 Google Play پر «' + P.name + '» سرچ کریں', W/2, fy+72);
   return c;
 }
 function appPosterCaption(){
@@ -8679,9 +8665,7 @@ function appPosterCaption(){
     '📲 *Google Play سے ڈاؤن لوڈ کریں:*',
     P.link,
     '',
-    `👨‍💻 ڈویلپر: ${P.dev}`,
-    `📞 WhatsApp: ${P.phone}`,
-    `📧 ${P.email}`
+    `🔍 Google Play پر «${P.name}» سرچ کریں`
   ].filter((l,i,a)=>!(l==='' && a[i-1]==='')).join('\n');
 }
 let _posterBusy = false;
@@ -9746,7 +9730,7 @@ function _buildEodCanvas(d, printWidthPx, forPrint, scale){
       ctx.strokeStyle= forPrint ? '#000' : '#ddd'; ctx.lineWidth=1;
       ctx.beginPath(); ctx.moveTo(PAD,y); ctx.lineTo(W-PAD,y); ctx.stroke(); y+=10;
       ctx.fillStyle= forPrint ? '#333' : 'rgba(150,150,150,0.7)'; ctx.textAlign='center'; ctx.font=`400 10px Arial,sans-serif`;
-      ctx.fillText((forPrint?'':'📲 ')+'For Mobile App: 0320-6793793',W/2,y);
+      { const bc = (typeof getBillCfg === 'function') ? getBillCfg() : {}; const ft = [bc.shopName, bc.phone].filter(Boolean).join('  •  '); if(ft) ctx.fillText(ft, W/2, y); }   // دکان کا اپنا نام / نمبر
 
       resolve(canvas);
     });
@@ -9902,7 +9886,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF0511TH031';
+const APP_VERSION = 'FF0511TH032';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10407,6 +10391,6 @@ if ('serviceWorker' in navigator) {
   try{ new MutationObserver(function(){ if(!queued){ queued = true; requestAnimationFrame(scan); } }).observe(document.documentElement, {childList:true, subtree:true}); }catch(e){}
 })();
 </script>
-<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0511TH031" defer></script> <!-- 🆘 FF0511TH031: PBT Help Desk -->
+<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0511TH032" defer></script> <!-- 🆘 FF0511TH032: PBT Help Desk -->
 </body>
 </html>
