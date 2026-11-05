@@ -1618,7 +1618,7 @@
         font-family:'Jameel Noori Nastaleeq Kasheeda','Noto Nastaliq Urdu',Arial;font-weight:700;font-size:13px;direction:rtl;
         cursor:pointer;text-align:center;
         box-shadow:0 4px 14px rgba(37,211,102,0.4);">
-        💬 WhatsApp پر میسج کریں
+        <span class="pbthd-sos" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(#fde047,#facc15);color:#111;border-radius:999px;padding:2px 9px;font:800 12px/1.35 Arial,sans-serif;box-shadow:0 2px 0 #ca8a04;white-space:nowrap;vertical-align:middle;direction:ltr"><b style="background:#111;color:#facc15;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:11px">?</b>Help Desk</span> مسئلہ یا سوال بتائیں
       </button>
     </div>
     <div class="ff-ov-ver" style="text-align:center;margin-top:12px;font-family:'Arial Black',Arial;font-size:12px;color:#c69500;letter-spacing:1px;direction:ltr;">—</div>
@@ -1652,7 +1652,8 @@
       animation:devChatPop .15s ease;
     ">
       <!-- WhatsApp Business -->
-      <a href="#" onclick="loginDevChatWhatsApp();return false;" title="WhatsApp Business" style="
+      <a href="#" onclick="openWhatsAppChat();return false;" title="Help Desk" style="text-decoration:none;display:flex;align-items:center;"><span class="pbthd-sos" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(#fde047,#facc15);color:#111;border-radius:999px;padding:2px 9px;font:800 12px/1.35 Arial,sans-serif;box-shadow:0 2px 0 #ca8a04;white-space:nowrap;vertical-align:middle;direction:ltr"><b style="background:#111;color:#facc15;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:11px">?</b>Help Desk</span></a>
+      <a href="#" onclick="loginDevChatWhatsApp();return false;" title="WhatsApp Business" style="display:none;
         position:relative; width:38px;height:38px;border-radius:11px;flex-shrink:0;
         display:flex;align-items:center;justify-content:center;
         background:linear-gradient(160deg,#2fd480 0%,#25D366 40%,#0f7a5c 100%);
@@ -1687,7 +1688,7 @@
       </a>
 
       <!-- SMS -->
-      <a href="#" onclick="loginDevChatSMS();return false;" title="SMS بھیجیں" style="
+      <a href="#" onclick="loginDevChatSMS();return false;" title="SMS بھیجیں" style="display:none;
         width:38px;height:38px;border-radius:11px;flex-shrink:0;
         display:flex;align-items:center;justify-content:center;
         background:linear-gradient(160deg,#4fc3f7 0%,#2196F3 45%,#1256a3 100%);
@@ -1931,7 +1932,7 @@
   <div id="ffGatePlans"></div>
   <div class="ff-ov-msg" id="gateMsg" style="text-align:center;margin-top:10px;color:#fff;max-width:340px;"></div>
   <div class="ffg-foot">
-    <button type="button" onclick="openWhatsAppChat()">💬 مدد</button>
+    <button type="button" onclick="openWhatsAppChat()"><span class="pbthd-sos" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(#fde047,#facc15);color:#111;border-radius:999px;padding:2px 9px;font:800 12px/1.35 Arial,sans-serif;box-shadow:0 2px 0 #ca8a04;white-space:nowrap;vertical-align:middle;direction:ltr"><b style="background:#111;color:#facc15;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:11px">?</b>Help Desk</span></button>
     <span class="ffg-uid">ID: <span id="gateUidShow">—</span></span>
   </div>
   <!-- FF910FR011: ورژن نیچے — آرام سے ٹیپ ہو سکے (7 ٹیپ = Developer Console) -->
@@ -2020,8 +2021,8 @@
 <div class="ff-overlay hidden" id="contactModal" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);">
   <div class="ff-overlay-card" style="margin:auto 0;">
     <div style="font-size:32px;margin-bottom:6px;">📲</div>
-    <div style="font-family:var(--font-black);font-weight:900;font-size:16px;color:#2e7d32;margin-bottom:4px;">ایپ خریدنے کے لیے رابطہ کریں</div>
-    <div style="font-size:10px;color:#aaa;letter-spacing:1px;margin-bottom:14px;">CONTACT FOR PURCHASE</div>
+    <div style="font-family:var(--font-black);font-weight:900;font-size:16px;color:#2e7d32;margin-bottom:4px;">مدد کے لیے رابطہ کریں</div>
+    <div style="font-size:10px;color:#aaa;letter-spacing:1px;margin-bottom:14px;">SUPPORT</div>
     <div class="uid-badge">
       <div class="uid-label">YOUR USER ID — یہ ID بھیجیں</div>
       <div class="uid-value" id="contactUidShow">——</div>
@@ -2050,8 +2051,8 @@
         box-shadow:0 4px 14px rgba(37,211,102,0.4);">
         <span style="font-size:20px;">💬</span>
         <div style="text-align:left;">
-          <div>WhatsApp پر میسج کریں</div>
-          <div style="font-size:10px;opacity:.85;font-weight:normal;" id="contactModalWA">0320-6793793</div>
+          <div><span class="pbthd-sos" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(#fde047,#facc15);color:#111;border-radius:999px;padding:2px 9px;font:800 12px/1.35 Arial,sans-serif;box-shadow:0 2px 0 #ca8a04;white-space:nowrap;vertical-align:middle;direction:ltr"><b style="background:#111;color:#facc15;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:11px">?</b>Help Desk</span> مسئلہ یا سوال بتائیں</div>
+          <div style="font-size:10px;opacity:.85;font-weight:normal;" id="contactModalWA">جواب ایپ کے اندر</div>
         </div>
       </button>
     </div>
@@ -2129,7 +2130,7 @@
       display:none; flex-direction:row; align-items:center; gap:8px;
       animation:devChatPop .15s ease;
     ">
-      <!-- FF0511TH032 (ہیلپ ڈیسک #31، مالک کا حکم): عام مدد = Help Desk + Gmail؛ واٹس ایپ / SMS صرف خریداری (کوڈ) والے حصوں میں -->
+      <!-- FF0511TH033 (ہیلپ ڈیسک #31، مالک کا حکم): عام مدد = Help Desk + Gmail؛ واٹس ایپ / SMS صرف خریداری (کوڈ) والے حصوں میں -->
       <button type="button" onclick="document.getElementById('devChatOptions').style.display='none'; openHelpDesk();" title="Help Desk — Report problems &amp; issues" style="background:none;border:0;padding:0;cursor:pointer;flex-shrink:0;"><span class="pbthd-sos" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(#fde047,#facc15);color:#111;border-radius:999px;padding:2px 9px;font:800 12px/1.35 Arial,sans-serif;box-shadow:0 2px 0 #ca8a04;white-space:nowrap;vertical-align:middle;direction:ltr"><b style="background:#111;color:#facc15;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:11px">?</b>Help Desk</span></button>
 
       <!-- Gmail — اصلی 4 رنگ لوگو، سفید بیک گراؤنڈ پر -->
@@ -2628,9 +2629,9 @@
           <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:2px solid #a5d6a7;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;">
             <span style="font-size:26px;">💬</span>
             <div>
-              <div style="font-size:9px;font-family:var(--font-black);font-weight:900;color:var(--green-dk);letter-spacing:.5px;margin-bottom:2px;">WHATSAPP CHAT ONLY — ٹیپ کریں</div>
-              <div style="font-size:13px;font-weight:900;font-family:var(--font-black);color:#2e7d32;" id="aboutWaDisplay">0320-6793793</div>
-              <div style="font-size:9px;color:#4a7a50;margin-top:1px;">WhatsApp chat کھل جائے گا</div>
+              <div style="font-size:9px;font-family:var(--font-black);font-weight:900;color:var(--green-dk);letter-spacing:.5px;margin-bottom:2px;">HELP DESK — ٹیپ کریں</div>
+              <div style="font-size:13px;font-weight:900;font-family:var(--font-black);color:#2e7d32;" id="aboutWaDisplay"><span class="pbthd-sos" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(#fde047,#facc15);color:#111;border-radius:999px;padding:2px 9px;font:800 12px/1.35 Arial,sans-serif;box-shadow:0 2px 0 #ca8a04;white-space:nowrap;vertical-align:middle;direction:ltr"><b style="background:#111;color:#facc15;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:11px">?</b>Help Desk</span></div>
+              <div style="font-size:9px;color:#4a7a50;margin-top:1px;">مسئلہ / سوال / مشورہ — جواب ایپ کے اندر</div>
             </div>
             <span style="margin-left:auto;font-size:18px;color:var(--muted);">›</span>
           </div>
@@ -3347,7 +3348,10 @@ function openGmailCompose(){
   window.open('mailto:' + getContactEmail() + '?subject=' + sub + '&body=' + body, '_blank');
 }
 
-function openWhatsAppChat(){
+/* مالک کا حکم (5 نومبر، پلے اسٹور ایپ): خریداری / کوڈ / مدد کے لیے ذاتی واٹس ایپ / SMS نہیں — صرف Help Desk + Gmail */
+function ffHelp(t){ try{ if(window.PBTHelp && PBTHelp.open){ PBTHelp.open({ app:'FFPOS', text: t || '', type:'ask' }); return; } }catch(e){} try{ openHelpDesk(); }catch(e){} }
+function openWhatsAppChat(){ ffHelp('FF POS — مدد چاہیے\nMy ID: ' + (typeof FF_UID !== 'undefined' ? FF_UID : '')); }
+function _oldWhatsAppChat(){
   const uid = FF_UID;
   const msg = encodeURIComponent(
     'Assalam o Alaikum, mujhe FF POS app ke bare mein madad chahiye.\nMera ID: ' + uid
@@ -3561,9 +3565,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF0511TH032';
+const FF_APP_VERSION = 'FF0511TH033';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Bills and reports now show your own shop name and phone — no developer ad';
+const FF_UPDATE_NOTE = 'Help and purchase questions now go through Help Desk (no WhatsApp)';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9886,7 +9890,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF0511TH032';
+const APP_VERSION = 'FF0511TH033';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -9951,9 +9955,7 @@ function applyContactInfo(){
   ['aboutGmailDisplay','contactModalEmail'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.textContent=email;
   });
-  ['aboutWaDisplay','contactModalWA'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.textContent=wa;
-  });
+  // واٹس ایپ نمبر اب نہیں دکھاتے (پلے اسٹور ایپ — رابطہ Help Desk سے)
 }
 applyContactInfo();
 // Boot: check subscription & show lock screen
@@ -10182,7 +10184,7 @@ document.addEventListener('click', function(e){
 function _devChatMsg(){
   return 'Respected sir\n\nI have an issue in your app Fast pos\n\nMay I elaborate now??';
 }
-function devChatWhatsApp(){
+function devChatWhatsApp(){ return ffHelp(_devChatMsg());
   const msg = encodeURIComponent(_devChatMsg());
   window.open('https://wa.me/923206793793?text=' + msg, '_blank');
 }
@@ -10191,7 +10193,7 @@ function devChatGmail(){
   const body = encodeURIComponent(_devChatMsg());
   window.open('mailto:pbtcodelabs@gmail.com?subject=' + sub + '&body=' + body, '_blank');
 }
-function devChatSMS(){
+function devChatSMS(){ return ffHelp(_devChatMsg());
   const body = encodeURIComponent(_devChatMsg());
   // iOS اور Android دونوں کے لیے مطابقت — دونوں طریقے آزمائیں
   const ua = navigator.userAgent || '';
@@ -10218,7 +10220,7 @@ function _loginDevChatMsg(){
   const uid = (typeof FF_UID!=='undefined') ? FF_UID : '';
   return 'Assalam o Alaikum!\n\nMujhe FF POS app ke bare mein madad chahiye.\n\nMera ID: ' + uid + '\n\nShukria';
 }
-function loginDevChatWhatsApp(){
+function loginDevChatWhatsApp(){ return ffHelp(_loginDevChatMsg());
   const msg = encodeURIComponent(_loginDevChatMsg());
   window.open('https://wa.me/923206793793?text=' + msg, '_blank');
 }
@@ -10228,7 +10230,7 @@ function loginDevChatGmail(){
   const body = encodeURIComponent(_loginDevChatMsg());
   window.open('mailto:pbtcodelabs@gmail.com?subject=' + sub + '&body=' + body, '_blank');
 }
-function loginDevChatSMS(){
+function loginDevChatSMS(){ return ffHelp(_loginDevChatMsg());
   const body = encodeURIComponent(_loginDevChatMsg());
   const ua = navigator.userAgent || '';
   const sep = /iPhone|iPad|iPod/i.test(ua) ? '&' : '?';
@@ -10391,6 +10393,6 @@ if ('serviceWorker' in navigator) {
   try{ new MutationObserver(function(){ if(!queued){ queued = true; requestAnimationFrame(scan); } }).observe(document.documentElement, {childList:true, subtree:true}); }catch(e){}
 })();
 </script>
-<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0511TH032" defer></script> <!-- 🆘 FF0511TH032: PBT Help Desk -->
+<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0511TH033" defer></script> <!-- 🆘 FF0511TH033: PBT Help Desk -->
 </body>
 </html>
