@@ -1564,7 +1564,7 @@
       <span onclick="closeDevConsole()" style="cursor:pointer;font-size:18px;font-weight:900;">✖</span>
     </div>
     <div id="devConsoleLocked">
-      <input type="password" id="devConsolePass" inputmode="numeric" autocomplete="off" placeholder="Developer password" onkeydown="if(event.key==='Enter') submitDevConsolePass()"
+      <input type="password" id="devConsolePass" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Developer password" onkeydown="if(event.key==='Enter') submitDevConsolePass()"
              style="width:100%;box-sizing:border-box;padding:11px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:15px;text-align:center;letter-spacing:3px;margin-bottom:8px;">
       <div id="devConsoleErr" style="display:none;color:#dc2626;font-size:12px;font-weight:700;text-align:center;margin-bottom:8px;">❌ Wrong password</div>
       <button type="button" id="devConsoleBtn" onclick="submitDevConsolePass()" style="width:100%;padding:11px;border:none;border-radius:10px;background:#1b5e20;color:#fff;font-weight:800;font-size:14px;cursor:pointer;">Unlock</button>
@@ -3586,9 +3586,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF0811SU034';
+const FF_APP_VERSION = 'FF1611MO035';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Update card now shows old → new version and what changed while updating';
+const FF_UPDATE_NOTE = 'Developer console: password field accepts letters too, and opens straight from the Help Desk';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9911,7 +9911,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF0811SU034';
+const APP_VERSION = 'FF1611MO035';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10414,6 +10414,12 @@ if ('serviceWorker' in navigator) {
   try{ new MutationObserver(function(){ if(!queued){ queued = true; requestAnimationFrame(scan); } }).observe(document.documentElement, {childList:true, subtree:true}); }catch(e){}
 })();
 </script>
-<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF0811SU034" defer></script> <!-- 🆘 FF0511TH033: PBT Help Desk -->
+<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF1611MO035" defer></script> <!-- 🆘 FF0511TH033: PBT Help Desk -->
+<script>
+/* 🔐 FF1611MO035 (مالک کا حکم): ہیلپ ڈیسک «🔐 ڈویلپر پینل» سے `?devpanel=1` — لوڈ کے بعد ڈویلپر کنسول خود کھلتا ہے (7 ٹیپ نہیں)۔ یہ الگ ویب سائٹ ہے، اس لیے پاس ورڈ یہیں «Change password» سے لگتا ہے۔ */
+(function(){ try{ if(!/[?&]devpanel=1\b/.test(location.search)) return;
+  window.addEventListener('load', () => setTimeout(() => { try{ openDevConsole(); }catch(e){} }, 2500));
+}catch(e){} })();
+</script>
 </body>
 </html>
