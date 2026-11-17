@@ -3451,7 +3451,7 @@ const DEV_UNLOCK_SALT = 'AIO-DEV-UNLOCK-v1';
 const DEV_UNLOCK_HASH = 'ec6bf74a5d10d1524fbae3dd818a3be18c04bd13a6bc3242dd0e5d9fe6532a85';
 function isDeveloperUnlocked(){ try{ return localStorage.getItem('ff_dev_unlock') === '1'; }catch(e){ return false; } }
 let _devTapCount = 0, _devTapTimer = null;
-function devConsoleBadgeTap(){ return; /* 🔐 مالک کا حکم (16 نومبر): 7 بار دبانے سے ڈویلپر پینل ختم — صرف ہیلپ ڈیسک «🔐 ڈویلپر پینل» سے (?devpanel=1) */
+function devConsoleBadgeTap(){ /* 🔐 مالک کا حکم (16 نومبر): 7 بار دبانے سے ڈویلپر پینل ختم تھا — MCS/سب ایپس 17 نومبر: مالک کے حکم سے واپس — صرف ہیلپ ڈیسک «🔐 ڈویلپر پینل» سے (?devpanel=1) */
   _devTapCount++;
   clearTimeout(_devTapTimer);
   _devTapTimer = setTimeout(()=>{ _devTapCount = 0; }, 2500);
@@ -3586,9 +3586,9 @@ function resetToSetupScreen(){
 //  کسٹمرز کی فعال سبسکرپشن ختم کرنا مناسب نہیں۔ لائسنس کی اصل تصدیق
 //  ہمیشہ Google Play سے ہوتی ہے، اس لیے یہاں ریسیٹ کی ضرورت نہیں)
 // ============================================================
-const FF_APP_VERSION = 'FF1611MO036';
+const FF_APP_VERSION = 'FF1711TU037';
 // ---------- ہر ریلیز پر ایک چھوٹی لائن (انگریزی) — Update complete کارڈ میں دکھتی ہے ----------
-const FF_UPDATE_NOTE = 'Developer panel opens only from the Help Desk now (7-tap removed)';
+const FF_UPDATE_NOTE = 'Developer panel opens again by tapping the version 7 times (with password) — Help Desk link still works';
 // ---------- FF910FR011: اپڈیٹ پٹی — اپڈیٹ کے دوران "انتظار کریں"، بعد میں پرانا/نیا ورژن ----------
 const FF_UPD_KEY = 'ff_update_from_version';
 let _ffUpdShown = false;
@@ -9911,7 +9911,7 @@ function generateFFPOSFileName(d){
   return 'FFPOS'+DD+M+DAY+HH+MM;
 }
 
-const APP_VERSION = 'FF1611MO036';
+const APP_VERSION = 'FF1711TU037';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionVal');
   if(el) el.textContent = APP_VERSION;
@@ -10414,9 +10414,9 @@ if ('serviceWorker' in navigator) {
   try{ new MutationObserver(function(){ if(!queued){ queued = true; requestAnimationFrame(scan); } }).observe(document.documentElement, {childList:true, subtree:true}); }catch(e){}
 })();
 </script>
-<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF1611MO036" defer></script> <!-- 🆘 FF0511TH033: PBT Help Desk -->
+<script src="https://pbtcodelabs-pbt.github.io/help/widget.js" data-app="FFPOS" data-ver="FF1711TU037" defer></script> <!-- 🆘 FF0511TH033: PBT Help Desk -->
 <script>
-/* 🔐 FF1611MO036 (مالک کا حکم): ہیلپ ڈیسک «🔐 ڈویلپر پینل» سے `?devpanel=1` — لوڈ کے بعد ڈویلپر کنسول خود کھلتا ہے (7 ٹیپ نہیں)۔ یہ الگ ویب سائٹ ہے، اس لیے پاس ورڈ یہیں «Change password» سے لگتا ہے۔ */
+/* 🔐 FF1711TU037 (مالک کا حکم): ہیلپ ڈیسک «🔐 ڈویلپر پینل» سے `?devpanel=1` — لوڈ کے بعد ڈویلپر کنسول خود کھلتا ہے (7 ٹیپ نہیں)۔ یہ الگ ویب سائٹ ہے، اس لیے پاس ورڈ یہیں «Change password» سے لگتا ہے۔ */
 (function(){ try{ if(!/[?&]devpanel=1\b/.test(location.search)) return;
   window.addEventListener('load', () => setTimeout(() => { try{ openDevConsole(); }catch(e){} }, 2500));
 }catch(e){} })();
